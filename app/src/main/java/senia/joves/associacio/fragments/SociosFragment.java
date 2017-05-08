@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -89,6 +90,7 @@ public class SociosFragment extends Fragment {
 
         //devolvemos la vista inflada
         return inflater.inflate(R.layout.fragment_socios, container, false);
+
     }
 
     @Override
@@ -106,6 +108,19 @@ public class SociosFragment extends Fragment {
             //rellenamos el interfaz
             rellenarInterfaz();
         }
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.anadirSocio);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                                R.anim.enter_from_left, R.anim.exit_to_right)
+                        .replace(R.id.contenido, new NewUserDialog())
+                        .addToBackStack("nuevoSocioFragment").commit();
+            }
+        });
 
     }
 

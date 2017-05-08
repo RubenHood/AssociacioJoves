@@ -18,6 +18,14 @@
     <string name="titulo_socios">Socios</string>
     <string name="titulo_eventos">Eventos</string>
     <string name="titulo_noticias">Noticias</string>
+    <string name="lbl_spinner">Quota socio:</string>
+    <string name="lbl_nombre">Nombre:</string>
+    <string name="lbl_direccion">Dirección:</string>
+    <string name="lbl_email">Email:</string>
+    <string name="lbl_poblacion">Población:</string>
+    <string name="lbl_socio">Nº socio:</string>
+    <string name="lbl_telefono">Teléfono:</string>
+    <string name="lbl_dni">DNI:</string>
     <string-array name="prueba">
         <item>dato</item>
         <item>dato</item>
@@ -33,5 +41,9 @@
         <item>Descomptes</item>
         <item>Vale</item>
         <item>Akell es tio</item>
+    </string-array>
+    <string-array name="entries">
+        <item>Pagado</item>
+        <item>No Pagado</item>
     </string-array>
 </resources>
