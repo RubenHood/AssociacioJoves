@@ -15,7 +15,6 @@ public class Socio {
     private String telefono;
 
     public Socio() {
-        //TEXTO
     }
 
     public Socio(String direccion, String dni, String email, String nombre, String poblacion, String quota, String socio, String telefono) {

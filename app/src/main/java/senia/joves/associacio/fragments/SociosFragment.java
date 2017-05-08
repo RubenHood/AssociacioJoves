@@ -97,11 +97,16 @@ public class SociosFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //mostramos un barra de progreso
-        mostrarCarga();
 
-        // Leemos de la RealTime Database Firebase
-        consultaSocios();
+        //comprobamos si esta lleno el array, para consultar FIREBASE
+        if (LISTA_SOCIOS.isEmpty() || LISTA_SOCIOS == null){
+            //mostramos un barra de progreso
+            mostrarCarga();
+
+            // Leemos de la RealTime Database Firebase
+            consultaSocios();
+        }
+
     }
 
     //metodo que consulta la bd y añade un listener para hacerla a tiempo real
@@ -118,6 +123,7 @@ public class SociosFragment extends Fragment {
                 // recogemos los datos
                 obtenerSocios(dataSnapshot);
 
+                //rellenamos la interfaz
                 rellenarInterfaz();
 
             }

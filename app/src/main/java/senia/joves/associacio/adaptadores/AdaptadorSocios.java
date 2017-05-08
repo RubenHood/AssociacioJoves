@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
+import senia.joves.associacio.librerias.ImagenCircular;
 
 public class AdaptadorSocios extends BaseAdapter {
 
@@ -66,7 +67,7 @@ public class AdaptadorSocios extends BaseAdapter {
         Socio item = this.items.get(position);
 
         //Seteamos la vista con los valores que le tocan a cada fila
-        Picasso.with(context).load(R.drawable.ic_person).into(fotoSocio);
+        Picasso.with(context).load(R.drawable.roberto).fit().transform(new ImagenCircular()).into(fotoSocio);
         lblNombre.setText(item.getNombre());
         lblPagado.setText(item.getQuota());
         lblSocio.setText(item.getSocio());
