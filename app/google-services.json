@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "914328457728",
+    "firebase_url": "https://associaciojoves-70d35.firebaseio.com",
+    "project_id": "associaciojoves-70d35",
+    "storage_bucket": "associaciojoves-70d35.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914328457728:android:cadb8108b58b2679",
+        "android_client_info": {
+          "package_name": "senia.joves.associacio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914328457728-o8pdad11708u8k4lmvc4l1ncdgvk9kit.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "senia.joves.associacio",
+            "certificate_hash": "41b180cd49089b1eeb5b1ba5278a6a8361517285"
+          }
+        },
+        {
+          "client_id": "914328457728-qmm8usktr9ple80k3f63sj9kv0240v3b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgrLGkmNzLP6RJdNMyFNDeYU_ddYZC98U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914328457728-qmm8usktr9ple80k3f63sj9kv0240v3b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

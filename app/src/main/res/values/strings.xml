@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Joves Seniencs</string>
+    <string name="texto_back">Desea salir?</string>
+    <string name="titulo_back">Salir</string>
+    <string name="error_no_internet">No hay conexión a internet, reintentando en 10 segundos.....</string>
+    <string name="error_no_login">Email o contraseña erróneos...</string>
+    <string name="error_email">Debe escribir un email correcto.</string>
+    <string name="error_password">La contraseña debe tener entre 8 y 16 carácteres. Al menos un dígito, una minúscula y una mayúscula.</string>
+    <string name="texto_boton_registro">REGISTRO</string>
+    <string name="texto_boton_login">LOG IN</string>
+    <string name="txf_email">Email</string>
+    <string name="txf_contrasena">Contraseña</string>
+    <string name="texto_logout">Log out</string>
+    <string name="texto_cargando">Cargando...</string>
+    <string name="titulo_main_fragment">Associación Jóvenes Seniencs</string>
+    <string name="titulo_login_fragment">Log in</string>
+    <string name="title_activity_tabbed">tabbedActivity</string>
+    <string name="titulo_socios">Socios</string>
+    <string name="titulo_eventos">Eventos</string>
+    <string name="titulo_noticias">Noticias</string>
+    <string-array name="prueba">
+        <item>dato</item>
+        <item>dato</item>
+        <item>dato</item>
+        <item>dato</item>
+        <item>dato</item>
+        <item>dato</item>
+    </string-array>
+    <string-array name="noticias">
+        <item>apuntate a la asosiacion</item>
+        <item>todos somos</item>
+        <item>Paga</item>
+        <item>Descomptes</item>
+        <item>Vale</item>
+        <item>Akell es tio</item>
+    </string-array>
+</resources>
