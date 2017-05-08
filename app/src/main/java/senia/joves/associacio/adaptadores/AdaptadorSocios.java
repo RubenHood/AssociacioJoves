@@ -60,8 +60,8 @@ public class AdaptadorSocios extends BaseAdapter {
         // recogemos los objetos de la vista
         ImageView fotoSocio = (ImageView) rowView.findViewById(R.id.icono);
         TextView lblNombre = (TextView) rowView.findViewById(R.id.nombre);
-        TextView lblPagado = (TextView) rowView.findViewById(R.id.pagado);
-        TextView lblSocio = (TextView) rowView.findViewById(R.id.socio);
+        ImageView fotoPagado = (ImageView) rowView.findViewById(R.id.pagado);
+
 
         //obtenemos el objeto de la tabla a partir de la lista
         Socio item = this.items.get(position);
@@ -69,8 +69,14 @@ public class AdaptadorSocios extends BaseAdapter {
         //Seteamos la vista con los valores que le tocan a cada fila
         Picasso.with(context).load(R.drawable.roberto).fit().transform(new ImagenCircular()).into(fotoSocio);
         lblNombre.setText(item.getNombre());
-        lblPagado.setText(item.getQuota());
-        lblSocio.setText(item.getSocio());
+
+        //comprobamos si ha pagado o no, para mostrar un dibujo u otro
+        if(item.getQuota().equals("PAGADO")) {
+            Picasso.with(context).load(R.drawable.pagado).into(fotoPagado);
+        }else{
+            Picasso.with(context).load(R.drawable.no_pagado).into(fotoPagado);
+        }
+
 
         return rowView;
     }

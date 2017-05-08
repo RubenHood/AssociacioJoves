@@ -84,9 +84,6 @@ public class SociosFragment extends Fragment {
         //referencia a la base de datos
         mDatabase = FirebaseDatabase.getInstance().getReference().child("socios");
 
-        //ordenamos por numero socio
-        mDatabase.orderByChild("nombre");
-
         //iniciamos el array
         LISTA_SOCIOS = new ArrayList<>();
 
@@ -105,26 +102,29 @@ public class SociosFragment extends Fragment {
 
             // Leemos de la RealTime Database Firebase
             consultaSocios();
+        }else {
+            //rellenamos el interfaz
+            rellenarInterfaz();
         }
 
     }
 
     //metodo que consulta la bd y añade un listener para hacerla a tiempo real
     private void consultaSocios() {
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase.orderByChild("nombre").addValueEventListener(new ValueEventListener() {
 
             //metodo que se ejecuta una vez, y cada vez que los datos de la bd cambian
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                //Escondemos el elemento de carga
-                esconderCarga();
 
                 // recogemos los datos
                 obtenerSocios(dataSnapshot);
 
                 //rellenamos la interfaz
                 rellenarInterfaz();
+
+                //Escondemos el elemento de carga
+                esconderCarga();
 
             }
 
