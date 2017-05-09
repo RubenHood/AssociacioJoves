@@ -30,6 +30,8 @@ import senia.joves.associacio.R;
 import senia.joves.associacio.adaptadores.AdaptadorSocios;
 import senia.joves.associacio.entidades.Socio;
 
+import static senia.joves.associacio.recursos.Recursos.LISTA_SOCIOS;
+
 /**
  * Created by Usuario on 08/05/2017.
  */
@@ -41,9 +43,6 @@ public class SociosFragment extends Fragment {
 
     //referencia a la base de datos
     private DatabaseReference mDatabase;
-
-    //Array que almacena todos los socios
-    private ArrayList<Socio> LISTA_SOCIOS;
 
     //referencia a la lista en la vista
     ListView lstLista;
@@ -76,8 +75,12 @@ public class SociosFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         //activamos la modificacion del appbar
         setHasOptionsMenu(true);
+
+        //para esconder mas rapido la flecha
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         //añadimos la descripcion al toolbar
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.titulo_socios));
@@ -98,13 +101,13 @@ public class SociosFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //comprobamos si esta lleno el array, para consultar FIREBASE
-        if (LISTA_SOCIOS.isEmpty() || LISTA_SOCIOS == null){
+        if (LISTA_SOCIOS.isEmpty() || LISTA_SOCIOS == null) {
             //mostramos un barra de progreso
             mostrarCarga();
 
             // Leemos de la RealTime Database Firebase
             consultaSocios();
-        }else {
+        } else {
             //rellenamos el interfaz
             rellenarInterfaz();
         }
@@ -117,7 +120,7 @@ public class SociosFragment extends Fragment {
                 getFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                                 R.anim.enter_from_left, R.anim.exit_to_right)
-                        .replace(R.id.contenido, new NewUserDialog())
+                        .replace(R.id.contenido, new NewUserFragment())
                         .addToBackStack("nuevoSocioFragment").commit();
             }
         });
@@ -172,7 +175,7 @@ public class SociosFragment extends Fragment {
             //metemos el objeto en el array
             LISTA_SOCIOS.add(s);
         }
-
+        Log.e("SociosFragment:", LISTA_SOCIOS.size() + "");
     }
 
     //metodo que a partir del array, rellenamos la interfaz

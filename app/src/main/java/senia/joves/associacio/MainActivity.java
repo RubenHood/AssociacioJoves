@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
         navigation = (BottomNavigationView) findViewById(R.id.navegacion);
 
-
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.contenido, new NoticiasFragment())
                 .addToBackStack("noticiasFragment").commit();
     }
-
 
     @Override
     public void onBackPressed() {

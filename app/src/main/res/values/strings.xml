@@ -5,6 +5,11 @@
     <string name="error_no_internet">No hay conexión a internet, reintentando en 10 segundos.....</string>
     <string name="error_no_login">Email o contraseña erróneos...</string>
     <string name="error_email">Debe escribir un email correcto.</string>
+    <string name="error_nombre">Debe escribir un nombre correcto.</string>
+    <string name="error_dni">Debe escribir un dni correcto.</string>
+    <string name="error_direccion">Debe escribir una dirección correcta.</string>
+    <string name="error_poblacion">Debe escribir una población correcta.</string>
+    <string name="error_telefono">Debe escribir un número de teléfono.</string>
     <string name="error_password">La contraseña debe tener entre 8 y 16 carácteres. Al menos un dígito, una minúscula y una mayúscula.</string>
     <string name="texto_boton_registro">REGISTRO</string>
     <string name="texto_boton_login">LOG IN</string>
@@ -18,6 +23,7 @@
     <string name="titulo_socios">Socios</string>
     <string name="titulo_eventos">Eventos</string>
     <string name="titulo_noticias">Noticias</string>
+    <string name="titulo_nuevo">Nuevo Socio</string>
     <string name="lbl_spinner">Quota socio:</string>
     <string name="lbl_nombre">Nombre:</string>
     <string name="lbl_direccion">Dirección:</string>
