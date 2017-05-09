@@ -10,7 +10,5 @@ import senia.joves.associacio.entidades.Socio;
 
 public final class Recursos {
 
-    //Array que almacena todos los socios
-    public static ArrayList<Socio> LISTA_SOCIOS;
 
 }

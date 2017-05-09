@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -26,7 +26,7 @@ import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 
-import static senia.joves.associacio.recursos.Recursos.LISTA_SOCIOS;
+import static senia.joves.associacio.fragments.SociosFragment.CANTIDAD_SOCIOS;
 
 /**
  * Created by Ruben on 08/05/2017.
@@ -113,7 +113,6 @@ public class NewUserFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //obtenemos los valores escritos por el usuario
                 String nombre = txfNombre.getText().toString();
                 String dni = txfDni.getText().toString();
@@ -124,20 +123,28 @@ public class NewUserFragment extends Fragment {
                 String quota;
 
                 //comprobamos que eleccion hay en el spinner //si es uno HA PAGADO si es 0 no ha pagado
-                if(spnQuota.getSelectedItemPosition() == 1){
+                if (spnQuota.getSelectedItemPosition() == 1) {
                     quota = "PAGADO";
-                }else {
+                } else {
                     quota = "";
                 }
 
-                //validamos los campos
-                if (validar(nombre, dni, email, direccion, poblacion, telefono)) {
-                    //añadimos un nuevo usuario
-                    Log.e("nuevo usuario:1", LISTA_SOCIOS.size() + "");
-                    ref.child("prueba").setValue(new Socio(direccion, dni, email, nombre, poblacion, quota, "200", telefono));
-                    Log.e("nuevo usuario:2", LISTA_SOCIOS.size() + "");
-                }
+                try {
+                    //validamos los campos
+                    if (validar(nombre, dni, email, direccion, poblacion, telefono)) {
 
+                        //Añadimos un socio al contador
+                        CANTIDAD_SOCIOS++;
+
+                        //salimos del actual fragment
+                        getFragmentManager().popBackStack();
+
+                        //añadimos un nuevo usuario
+                        ref.child(String.valueOf(CANTIDAD_SOCIOS)).setValue(new Socio(direccion, dni, email, nombre, poblacion, quota, String.valueOf(CANTIDAD_SOCIOS), telefono));
+                    }
+                } catch (Exception e) {
+                    FirebaseCrash.log(e.getMessage());
+                }
             }
         });
 
@@ -201,12 +208,6 @@ public class NewUserFragment extends Fragment {
         Pattern patron = Pattern.compile("^(\\+34|0034|34)?[ -]*(6|7)[ -]*([0-9][ -]*){8}$");
 
         return patron.matcher(telefono).matches();
-    }
-
-    private boolean validardireccion(String direccion) {
-        Pattern patron = Pattern.compile("^[a-zñA-Z\\s]{5,40}$");
-
-        return patron.matcher(direccion).matches();
     }
 
     private boolean validarDni(String dni) {

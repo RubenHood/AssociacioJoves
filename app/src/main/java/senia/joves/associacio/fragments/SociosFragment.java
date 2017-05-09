@@ -30,13 +30,17 @@ import senia.joves.associacio.R;
 import senia.joves.associacio.adaptadores.AdaptadorSocios;
 import senia.joves.associacio.entidades.Socio;
 
-import static senia.joves.associacio.recursos.Recursos.LISTA_SOCIOS;
-
 /**
  * Created by Usuario on 08/05/2017.
  */
 
 public class SociosFragment extends Fragment {
+
+    //Datos compartidos
+    //Array que almacena todos los socios
+    public static ArrayList<Socio> LISTA_SOCIOS;
+    public static int CANTIDAD_SOCIOS = 0;
+    //FIN DE DATOS COMPARTIDOS
 
     //variable para el progress dialog
     private ProgressDialog mProgressDialog;
@@ -75,12 +79,8 @@ public class SociosFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         //activamos la modificacion del appbar
         setHasOptionsMenu(true);
-
-        //para esconder mas rapido la flecha
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         //añadimos la descripcion al toolbar
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.titulo_socios));
@@ -101,13 +101,13 @@ public class SociosFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //comprobamos si esta lleno el array, para consultar FIREBASE
-        if (LISTA_SOCIOS.isEmpty() || LISTA_SOCIOS == null) {
+        if (LISTA_SOCIOS.isEmpty() || LISTA_SOCIOS == null){
             //mostramos un barra de progreso
             mostrarCarga();
 
             // Leemos de la RealTime Database Firebase
             consultaSocios();
-        } else {
+        }else {
             //rellenamos el interfaz
             rellenarInterfaz();
         }
@@ -175,7 +175,9 @@ public class SociosFragment extends Fragment {
             //metemos el objeto en el array
             LISTA_SOCIOS.add(s);
         }
-        Log.e("SociosFragment:", LISTA_SOCIOS.size() + "");
+        //almacenamos la cantidad de socios
+        CANTIDAD_SOCIOS = LISTA_SOCIOS.size();
+
     }
 
     //metodo que a partir del array, rellenamos la interfaz
