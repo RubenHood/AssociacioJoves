@@ -49,7 +49,9 @@
                 android:layout_marginStart="26dp"
                 android:layout_toEndOf="@+id/icono"
                 android:layout_toRightOf="@+id/icono"
-                android:text="Roberto Marquez Moreno" />
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="Roberto Marquez Moreno"
+                android:textColor="@color/cardview_dark_background" />
 
             <ImageView
                 android:id="@+id/pagado"
@@ -60,7 +62,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/no_pagado" />
+                app:srcCompat="@drawable/no_pagadob" />
 
 
         </RelativeLayout>

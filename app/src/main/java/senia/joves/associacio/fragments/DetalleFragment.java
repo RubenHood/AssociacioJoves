@@ -1,11 +1,13 @@
 package senia.joves.associacio.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.Switch;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
@@ -25,10 +27,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.regex.Pattern;
 
 import senia.joves.associacio.LoginActivity;
+import senia.joves.associacio.MainActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 
-import static senia.joves.associacio.fragments.SociosFragment.CANTIDAD_SOCIOS;
+import static senia.joves.associacio.fragments.SociosFragment.NUMERO_ULTIMO_SOCIO;
 
 /**
  * Created by Ruben on 08/05/2017.
@@ -43,11 +46,15 @@ public class DetalleFragment extends Fragment {
     private EditText txfDireccion;
     private EditText txfPoblacion;
     private EditText txfTelefono;
-    private Spinner spnQuota;
+    private EditText txfSocio;
+    private Switch swSwitch;
     private FloatingActionButton fab;
 
     //referencia a la bd
     DatabaseReference ref;
+
+    //variable que almacena el socio que llega
+    private Socio socio;
 
     public DetalleFragment() {
 
@@ -81,7 +88,14 @@ public class DetalleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        //referencia a la bd donde actualizar socios
         ref = FirebaseDatabase.getInstance().getReference("socios");
+
+        //instanciamos el objeto
+        socio = new Socio();
+
+        //recogemos el objeto pasado como argumento
+        socio = (Socio) getArguments().getSerializable("socio");
 
         //activamos la modificacion del appbar
         setHasOptionsMenu(true);
@@ -91,9 +105,9 @@ public class DetalleFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //añadimos el titulo al toolbar
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.titulo_nuevo));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(socio.getNombre());
 
-        return inflater.inflate(R.layout.fragment_nuevo_socio, container, false);
+        return inflater.inflate(R.layout.fragment_detalle, container, false);
     }
 
     @Override
@@ -101,31 +115,54 @@ public class DetalleFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //capturamos todos los elementos del formulario
-        txfNombre = (EditText) getActivity().findViewById(R.id.txfNombre);
-        txfDni = (EditText) getActivity().findViewById(R.id.txfDni);
-        txfEmail = (EditText) getActivity().findViewById(R.id.txfEmail);
-        txfDireccion = (EditText) getActivity().findViewById(R.id.txfDireccion);
-        txfPoblacion = (EditText) getActivity().findViewById(R.id.txfPoblacion);
-        txfTelefono = (EditText) getActivity().findViewById(R.id.txfTelefono);
-        spnQuota = (Spinner) getActivity().findViewById(R.id.spnQuota);
-        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        txfNombre = (EditText) getActivity().findViewById(R.id.txfNombre_d);
+        txfDni = (EditText) getActivity().findViewById(R.id.txfDni_d);
+        txfEmail = (EditText) getActivity().findViewById(R.id.txfEmail_d);
+        txfDireccion = (EditText) getActivity().findViewById(R.id.txfDireccion_d);
+        txfPoblacion = (EditText) getActivity().findViewById(R.id.txfPoblacion_d);
+        txfTelefono = (EditText) getActivity().findViewById(R.id.txfTelefono_d);
+        txfSocio = (EditText) getActivity().findViewById(R.id.txfsocio_d);
+        swSwitch = (Switch) getActivity().findViewById(R.id.swPagado);
+        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_d);
+
+        //modificamos el tamaño del switch
+        swSwitch.setSwitchMinWidth(200);
+        swSwitch.setSwitchPadding(20);
+
+        //mostramos los datos en sus textView
+        txfNombre.setText(socio.getNombre());
+        txfDireccion.setText(socio.getDireccion());
+        txfDni.setText(socio.getDni());
+        txfEmail.setText(socio.getEmail());
+        txfPoblacion.setText(socio.getPoblacion());
+        txfTelefono.setText(socio.getTelefono());
+        txfSocio.setText(socio.getSocio());
+
+        //comprobamos si el socio ha pagado, para checkar o no el switch
+        if(socio.getQuota().equals("PAGADO")){
+            swSwitch.setChecked(true);
+        }else{
+            swSwitch.setChecked(false);
+        }
 
         //listener para cuando clicamos en el boton flotante
         //añadimos un socio nuevo en firebase
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //obtenemos los valores escritos por el usuario
-                String nombre = txfNombre.getText().toString();
-                String dni = txfDni.getText().toString();
-                String email = txfEmail.getText().toString();
-                String direccion = txfDireccion.getText().toString();
-                String poblacion = txfPoblacion.getText().toString();
-                String telefono = txfTelefono.getText().toString();
-                String quota;
 
-                //comprobamos que eleccion hay en el spinner //si es uno HA PAGADO si es 0 no ha pagado
-                if (spnQuota.getSelectedItemPosition() == 1) {
+                //obtenemos los valores escritos por el usuario
+                final String nombre = txfNombre.getText().toString();
+                final String dni = txfDni.getText().toString();
+                final String email = txfEmail.getText().toString();
+                final String direccion = txfDireccion.getText().toString();
+                final String poblacion = txfPoblacion.getText().toString();
+                final String telefono = txfTelefono.getText().toString();
+                final String quota;
+
+
+                //comprobamos que eleccion hay en el switch //si es true HA PAGADO si es false no ha pagado
+                if (swSwitch.isChecked()) {
                     quota = "PAGADO";
                 } else {
                     quota = "";
@@ -142,13 +179,26 @@ public class DetalleFragment extends Fragment {
                             inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                         //Añadimos un socio al contador
-                        CANTIDAD_SOCIOS++;
+                        NUMERO_ULTIMO_SOCIO++;
 
-                        //añadimos un nuevo usuario
-                        ref.child(String.valueOf(CANTIDAD_SOCIOS)).setValue(new Socio(direccion, dni, email, nombre, poblacion, quota, String.valueOf(CANTIDAD_SOCIOS), telefono));
+                        //mostramos un dialogo para preguntar si estamos seguro de actualizar el registro
+                        new AlertDialog.Builder(getActivity())
+                                .setIcon(R.drawable.ic_action_person)
+                                .setTitle(R.string.titulo_actualizar)
+                                .setMessage(R.string.texto_actualizar)
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //añadimos un nuevo usuario
+//                                        ref.child(String.valueOf(NUMERO_ULTIMO_SOCIO)).setValue(new Socio(direccion, dni, email, nombre, poblacion, quota, String.valueOf(NUMERO_ULTIMO_SOCIO), telefono));
+//
+//                                        //salimos del actual fragment
+//                                        getFragmentManager().popBackStack();
+                                    }
+                                })
+                                .show();
 
-                        //salimos del actual fragment
-                        getFragmentManager().popBackStack();
                     }
                 } catch (Exception e) {
                     FirebaseCrash.log(e.getMessage());
@@ -183,13 +233,13 @@ public class DetalleFragment extends Fragment {
             return false;
         }
 
-        if (!validarnombre(direccion)) {
+        if (!validarVacio(direccion)) {
             txfDireccion.requestFocus();
             txfDireccion.setError(getResources().getString(R.string.error_direccion));
             return false;
         }
 
-        if (!validarnombre(poblacion)) {
+        if (!validarVacio(poblacion)) {
             txfPoblacion.requestFocus();
             txfPoblacion.setError(getResources().getString(R.string.error_poblacion));
             return false;
@@ -209,6 +259,14 @@ public class DetalleFragment extends Fragment {
         Pattern patron = Pattern.compile("^[a-zñA-Z\\s]{5,40}$");
 
         return patron.matcher(nombre).matches();
+    }
+
+    private boolean validarVacio(String nombre) {
+        if (nombre.length() > 60 || nombre.isEmpty()){
+            return  false;
+        }else {
+            return true;
+        }
     }
 
     private boolean validartelefono(String telefono) {

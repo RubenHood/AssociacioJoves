@@ -79,11 +79,10 @@ public class AdaptadorSocios extends BaseAdapter {
 
         //comprobamos si ha pagado o no, para mostrar un dibujo u otro
         if(item.getQuota().equals("PAGADO")) {
-            Picasso.with(context).load(R.drawable.pagado).into(fotoPagado);
+            Picasso.with(context).load(R.drawable.pagadob).into(fotoPagado);
         }else{
-            Picasso.with(context).load(R.drawable.no_pagado).into(fotoPagado);
+            Picasso.with(context).load(R.drawable.no_pagadob).into(fotoPagado);
         }
-
 
         return rowView;
     }

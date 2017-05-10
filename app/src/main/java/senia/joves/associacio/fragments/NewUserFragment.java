@@ -28,7 +28,7 @@ import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 
-import static senia.joves.associacio.fragments.SociosFragment.CANTIDAD_SOCIOS;
+import static senia.joves.associacio.fragments.SociosFragment.NUMERO_ULTIMO_SOCIO;
 
 /**
  * Created by Ruben on 08/05/2017.
@@ -142,10 +142,10 @@ public class NewUserFragment extends Fragment {
                             inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                         //Añadimos un socio al contador
-                        CANTIDAD_SOCIOS++;
+                        NUMERO_ULTIMO_SOCIO++;
 
                         //añadimos un nuevo usuario
-                        ref.child(String.valueOf(CANTIDAD_SOCIOS)).setValue(new Socio(direccion, dni, email, nombre, poblacion, quota, String.valueOf(CANTIDAD_SOCIOS), telefono));
+                        ref.child(String.valueOf(NUMERO_ULTIMO_SOCIO)).setValue(new Socio(direccion, dni, email, nombre, poblacion, quota, String.valueOf(NUMERO_ULTIMO_SOCIO), telefono));
 
                         //salimos del actual fragment
                         getFragmentManager().popBackStack();

@@ -1,10 +1,12 @@
 package senia.joves.associacio.entidades;
 
+import java.io.Serializable;
+
 /**
  * Created by Ruben on 02/05/2017.
  */
 
-public class Socio {
+public class Socio implements Serializable{
     private String direccion;
     private String dni;
     private String email;

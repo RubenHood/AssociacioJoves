@@ -2,6 +2,8 @@
     <string name="app_name">Joves Seniencs</string>
     <string name="texto_back">Desea salir?</string>
     <string name="titulo_back">Salir</string>
+    <string name="titulo_actualizar">Actualizar Socio</string>
+    <string name="texto_actualizar">Está seguro que desea actualizar el socio?</string>
     <string name="error_no_internet">No hay conexión a internet, reintentando en 10 segundos.....</string>
     <string name="error_no_login">Email o contraseña erróneos...</string>
     <string name="error_email">Debe escribir un email correcto.</string>
@@ -34,6 +36,7 @@
     <string name="lbl_dni">DNI:</string>
     <string name="menu_opcion_buscar">buscar</string>
     <string name="exito_añadir">ha sido añadido correctamente.</string>
+    <string name="lbl_pagado">Cuota</string>
     <string-array name="prueba">
         <item>dato</item>
         <item>dato</item>

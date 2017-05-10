@@ -46,8 +46,7 @@ public class SociosFragment extends Fragment {
     //Datos compartidos
     //Array que almacena todos los socios
     public static ArrayList<Socio> LISTA_SOCIOS;
-    public static int CANTIDAD_SOCIOS = 0;
-
+    public static int NUMERO_ULTIMO_SOCIO = 0;
     //Variable para el array que recibimos en el adaptador
     public static ArrayList<Socio> ARRAY_RECIBIDO = new ArrayList<>();
     //FIN DE DATOS COMPARTIDOS
@@ -217,8 +216,8 @@ public class SociosFragment extends Fragment {
             //metemos el objeto en el array
             LISTA_SOCIOS.add(s);
         }
-        //almacenamos la cantidad de socios
-        CANTIDAD_SOCIOS = LISTA_SOCIOS.size();
+        //almacenamos el numero del ultimo socio
+//        NUMERO_ULTIMO_SOCIO = Integer.getInteger(LISTA_SOCIOS.get(LISTA_SOCIOS.size()).getSocio());
     }
 
     //metodo que a partir del array, rellenamos la interfaz
@@ -237,11 +236,23 @@ public class SociosFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                //creamos un bundle
+                Bundle b = new Bundle();
+
+                //lo llenamos del socio a ver en detalle
+                b.putSerializable("socio", ARRAY_RECIBIDO.get(position));
+
+                //referencia al fragment de detalle
+                DetalleFragment df = new DetalleFragment();
+
+                //pasamos el bundle (con el socio) al fragment
+                df.setArguments(b);
+
                 //vamos a la actividad de detalle
                 getFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                                 R.anim.enter_from_left, R.anim.exit_to_right)
-                        .replace(R.id.contenido, new DetalleFragment())
+                        .replace(R.id.contenido, df)
                         .addToBackStack("detalleFragment").commit();
             }
         });
