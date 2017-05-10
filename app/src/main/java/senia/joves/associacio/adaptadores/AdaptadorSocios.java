@@ -15,29 +15,36 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 import senia.joves.associacio.librerias.ImagenCircular;
 
+import static senia.joves.associacio.fragments.SociosFragment.ARRAY_RECIBIDO;
+
 public class AdaptadorSocios extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Socio> items;
+
+    //variable para el filtrado
+    private ArrayList<Socio> arrayApoyo;
 
     public AdaptadorSocios(Context context, ArrayList<Socio> items) {
+        ARRAY_RECIBIDO = items;
         this.context = context;
-        this.items = items;
+        this.arrayApoyo = new ArrayList<>();
+        this.arrayApoyo.addAll(items);
     }
 
     @Override
     public int getCount() {
-        return this.items.size();
+        return ARRAY_RECIBIDO.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return this.items.get(position);
+        return ARRAY_RECIBIDO.get(position);
     }
 
     @Override
@@ -64,7 +71,7 @@ public class AdaptadorSocios extends BaseAdapter {
 
 
         //obtenemos el objeto de la tabla a partir de la lista
-        Socio item = this.items.get(position);
+        Socio item = ARRAY_RECIBIDO.get(position);
 
         //Seteamos la vista con los valores que le tocan a cada fila
         Picasso.with(context).load(R.drawable.roberto).fit().transform(new ImagenCircular()).into(fotoSocio);
@@ -79,6 +86,21 @@ public class AdaptadorSocios extends BaseAdapter {
 
 
         return rowView;
+    }
+
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        ARRAY_RECIBIDO.clear();
+        if (charText.length() == 0) {
+            ARRAY_RECIBIDO.addAll(arrayApoyo);
+        } else {
+            for (Socio wp : arrayApoyo) {
+                if (wp.getNombre().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    ARRAY_RECIBIDO.add(wp);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
 }

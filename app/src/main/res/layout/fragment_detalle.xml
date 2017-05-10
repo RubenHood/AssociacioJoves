@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_nombre_d"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="false"
+            android:layout_marginLeft="27dp"
+            android:layout_marginRight="27dp"
+            android:layout_marginTop="5dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/txfNombre_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lbl_nombre"
+                android:inputType="textPersonName"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:selectAllOnFocus="true"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black"
+                android:textColorLink="@android:color/holo_red_dark" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_dni_d"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/layout_nombre_d"
+            android:layout_alignLeft="@+id/layout_nombre_d"
+            android:layout_alignRight="@+id/layout_nombre_d"
+            android:layout_alignStart="@+id/layout_nombre_d"
+            android:layout_below="@+id/layout_nombre_d"
+            android:layout_marginTop="10dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/txfDni_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lbl_dni"
+                android:inputType="textPersonName"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:selectAllOnFocus="true"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_email_d"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/layout_dni_d"
+            android:layout_alignLeft="@+id/layout_dni_d"
+            android:layout_alignRight="@+id/layout_dni_d"
+            android:layout_alignStart="@+id/layout_dni_d"
+            android:layout_below="@+id/layout_dni_d"
+            android:layout_marginTop="10dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/txfEmail_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lbl_email"
+                android:inputType="textEmailAddress"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:selectAllOnFocus="true"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_direccion_d"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/layout_email_d"
+            android:layout_alignLeft="@+id/layout_email_d"
+            android:layout_alignRight="@+id/layout_email_d"
+            android:layout_alignStart="@+id/layout_email_d"
+            android:layout_below="@+id/layout_email_d"
+            android:layout_marginTop="10dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/txfDireccion_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lbl_direccion"
+                android:inputType="textPersonName"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:selectAllOnFocus="true"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_poblacion_d"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/layout_direccion_d"
+            android:layout_alignLeft="@+id/layout_direccion_d"
+            android:layout_alignRight="@+id/layout_direccion_d"
+            android:layout_alignStart="@+id/layout_direccion_d"
+            android:layout_below="@+id/layout_direccion_d"
+            android:layout_marginTop="10dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/txfPoblacion_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lbl_poblacion"
+                android:inputType="textPersonName"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:selectAllOnFocus="true"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_telefono_d"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/layout_poblacion_d"
+            android:layout_alignLeft="@+id/layout_poblacion_d"
+            android:layout_alignRight="@+id/layout_poblacion_d"
+            android:layout_alignStart="@+id/layout_poblacion_d"
+            android:layout_below="@+id/layout_poblacion_d"
+            android:layout_marginTop="10dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/txfTelefono_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lbl_telefono"
+                android:inputType="phone"
+                android:maxLength="9"
+                android:maxLines="1"
+                android:selectAllOnFocus="true"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/spnQuota_d"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/layout_telefono_d"
+            android:layout_alignStart="@+id/layout_telefono_d"
+            android:layout_below="@+id/layout_telefono_d"
+            android:layout_marginTop="25dp"
+            android:entries="@array/entries"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:spinnerMode="dialog" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_d"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_action_check" />
+
+</android.support.design.widget.CoordinatorLayout>

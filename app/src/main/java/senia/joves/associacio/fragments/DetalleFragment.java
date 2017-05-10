@@ -34,7 +34,7 @@ import static senia.joves.associacio.fragments.SociosFragment.CANTIDAD_SOCIOS;
  * Created by Ruben on 08/05/2017.
  */
 
-public class NewUserFragment extends Fragment {
+public class DetalleFragment extends Fragment {
 
     //referencias a componentes de la vista
     private EditText txfNombre;
@@ -49,7 +49,7 @@ public class NewUserFragment extends Fragment {
     //referencia a la bd
     DatabaseReference ref;
 
-    public NewUserFragment() {
+    public DetalleFragment() {
 
     }
 

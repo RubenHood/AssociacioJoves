@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,9 +17,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import senia.joves.associacio.LoginActivity;
+import senia.joves.associacio.MainActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.adaptadores.AdaptadorSocios;
 import senia.joves.associacio.entidades.Socio;
@@ -40,6 +47,9 @@ public class SociosFragment extends Fragment {
     //Array que almacena todos los socios
     public static ArrayList<Socio> LISTA_SOCIOS;
     public static int CANTIDAD_SOCIOS = 0;
+
+    //Variable para el array que recibimos en el adaptador
+    public static ArrayList<Socio> ARRAY_RECIBIDO = new ArrayList<>();
     //FIN DE DATOS COMPARTIDOS
 
     //variable para el progress dialog
@@ -48,14 +58,44 @@ public class SociosFragment extends Fragment {
     //referencia a la base de datos
     private DatabaseReference mDatabase;
 
+    //Listener que escucha si hay cambios en la BD de FIREBASE
+    ValueEventListener postListener;
+
     //referencia a la lista en la vista
     ListView lstLista;
+
+    //referencia al adaptador
+    AdaptadorSocios ad;
+
+    //referencia al buscador
+    SearchView searchView;
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_principal, menu);
+        inflater.inflate(R.menu.menu_socios, menu);
+
+        MenuItem item = menu.findItem(R.id.buscar);
+        searchView = new SearchView(((MainActivity) getActivity()).getSupportActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(item, searchView);
+
+        //añadimos el listener para buscar
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                String text = newText;
+                ad.filter(text);
+                return false;
+            }
+        });
+
     }
 
     @Override
@@ -101,13 +141,13 @@ public class SociosFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //comprobamos si esta lleno el array, para consultar FIREBASE
-        if (LISTA_SOCIOS.isEmpty() || LISTA_SOCIOS == null){
+        if (LISTA_SOCIOS.isEmpty() || LISTA_SOCIOS == null) {
             //mostramos un barra de progreso
             mostrarCarga();
 
             // Leemos de la RealTime Database Firebase
             consultaSocios();
-        }else {
+        } else {
             //rellenamos el interfaz
             rellenarInterfaz();
         }
@@ -125,16 +165,15 @@ public class SociosFragment extends Fragment {
             }
         });
 
+
     }
 
-    //metodo que consulta la bd y añade un listener para hacerla a tiempo real
+    //metodo que consulta la bd y añade listeners para los cambios. para hacerla a tiempo real
     private void consultaSocios() {
-        mDatabase.orderByChild("nombre").addValueEventListener(new ValueEventListener() {
 
-            //metodo que se ejecuta una vez, y cada vez que los datos de la bd cambian
+        postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 // recogemos los datos
                 obtenerSocios(dataSnapshot);
 
@@ -143,14 +182,17 @@ public class SociosFragment extends Fragment {
 
                 //Escondemos el elemento de carga
                 esconderCarga();
-
             }
 
-            //metodo callback cuando falla la consulta
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                FirebaseCrash.log("Error al recuperar datos: " + databaseError.toException());
+
             }
-        });
+        };
+
+
     }
 
     //metodo que a partir de un dato Snapshot, rellenamos un arraylist con todos los socios
@@ -177,7 +219,6 @@ public class SociosFragment extends Fragment {
         }
         //almacenamos la cantidad de socios
         CANTIDAD_SOCIOS = LISTA_SOCIOS.size();
-
     }
 
     //metodo que a partir del array, rellenamos la interfaz
@@ -187,10 +228,23 @@ public class SociosFragment extends Fragment {
         lstLista = (ListView) getActivity().findViewById(R.id.listaSocios);
 
         //creamos un adaptador a partir del Array lleno y el contexto
-        AdaptadorSocios ad = new AdaptadorSocios(getActivity(), LISTA_SOCIOS);
+        ad = new AdaptadorSocios(getActivity(), LISTA_SOCIOS);
 
         //pasamos el adapter a la lista
         lstLista.setAdapter(ad);
+
+        lstLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //vamos a la actividad de detalle
+                getFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                                R.anim.enter_from_left, R.anim.exit_to_right)
+                        .replace(R.id.contenido, new DetalleFragment())
+                        .addToBackStack("detalleFragment").commit();
+            }
+        });
     }
 
 
@@ -213,4 +267,26 @@ public class SociosFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            mDatabase.orderByChild("nombre").addValueEventListener(postListener);
+        }catch (Exception e ){
+            FirebaseCrash.log(e.getMessage());
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //igualamos las variables
+        ARRAY_RECIBIDO = LISTA_SOCIOS;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mDatabase.removeEventListener(postListener);
+    }
 }
