@@ -122,7 +122,7 @@ public class DetalleFragment extends Fragment {
         txfPoblacion = (EditText) getActivity().findViewById(R.id.txfPoblacion_d);
         txfTelefono = (EditText) getActivity().findViewById(R.id.txfTelefono_d);
         txfSocio = (EditText) getActivity().findViewById(R.id.txfsocio_d);
-        swSwitch = (Switch) getActivity().findViewById(R.id.swPagado);
+        swSwitch = (Switch) getActivity().findViewById(R.id.swPagado_d);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_d);
 
         //modificamos el tamaño del switch

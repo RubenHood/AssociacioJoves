@@ -8,7 +8,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/relativeLayout">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/layout_nombre"
@@ -160,18 +161,18 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <Spinner
-            android:id="@+id/spnQuota"
-            android:layout_width="255dp"
-            android:layout_height="wrap_content"
+        <Switch
+            android:id="@+id/swPagado"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_alignLeft="@+id/layout_telefono"
             android:layout_alignStart="@+id/layout_telefono"
             android:layout_below="@+id/layout_telefono"
-            android:layout_marginTop="25dp"
-            android:entries="@array/entries"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:spinnerMode="dialog" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="23dp"
+            android:text="@string/lbl_pagado"
+            app:layout_anchor="@+id/relativeLayout"
+            app:layout_anchorGravity="top|left" />
 
     </RelativeLayout>
 

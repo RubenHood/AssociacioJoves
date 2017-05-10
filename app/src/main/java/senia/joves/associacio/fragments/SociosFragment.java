@@ -216,7 +216,7 @@ public class SociosFragment extends Fragment {
             //metemos el objeto en el array
             LISTA_SOCIOS.add(s);
         }
-        //almacenamos el numero del ultimo socio
+        //almacenamos el numero del ultimo socio Todo
 //        NUMERO_ULTIMO_SOCIO = Integer.getInteger(LISTA_SOCIOS.get(LISTA_SOCIOS.size()).getSocio());
     }
 
