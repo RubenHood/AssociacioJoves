@@ -74,8 +74,14 @@ public class AdaptadorSocios extends BaseAdapter {
         Socio item = ARRAY_RECIBIDO.get(position);
 
         //Seteamos la vista con los valores que le tocan a cada fila
-        Picasso.with(context).load(R.drawable.roberto).fit().transform(new ImagenCircular()).into(fotoSocio);
         lblNombre.setText(item.getNombre());
+
+        //comprobamos si tiene foto de perfil para ponerla o para no ponerla
+        if(item.getImagen() == null || item.getImagen().isEmpty()){
+            Picasso.with(context).load(R.drawable.no_perfil).fit().transform(new ImagenCircular()).into(fotoSocio);
+        }else {
+            Picasso.with(context).load(item.getImagen()).fit().transform(new ImagenCircular()).into(fotoSocio);
+        }
 
         //comprobamos si ha pagado o no, para mostrar un dibujo u otro
         if(item.getQuota().equals("PAGADO")) {

@@ -15,6 +15,7 @@ public class Socio implements Serializable{
     private String quota;
     private String socio;
     private String telefono;
+    private String imagen;
 
     public Socio() {
     }
@@ -92,5 +93,13 @@ public class Socio implements Serializable{
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }

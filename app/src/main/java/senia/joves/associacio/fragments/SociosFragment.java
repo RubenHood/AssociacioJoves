@@ -217,6 +217,7 @@ public class SociosFragment extends Fragment {
             s.setQuota(ds.child("quota").getValue().toString());
             s.setSocio(ds.child("socio").getValue().toString());
             s.setTelefono(ds.child("telefono").getValue().toString());
+            s.setImagen(ds.child("imagen").getValue().toString());
 
             //metemos el objeto en el array
             LISTA_SOCIOS.add(s);
