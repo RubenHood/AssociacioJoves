@@ -147,7 +147,7 @@ public class NewUserFragment extends Fragment {
                         //escondemos el teclado virtual
                         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         View focus = getActivity().getCurrentFocus();
-                        if(focus != null)
+                        if (focus != null)
                             inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                         //Añadimos un socio al contador
@@ -162,13 +162,30 @@ public class NewUserFragment extends Fragment {
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        //añadimos un nuevo usuario
-                                        ref.child(String.valueOf(NUMERO_ULTIMO_SOCIO)).setValue(new Socio(direccion, dni, email, nombre, poblacion, quota, String.valueOf(NUMERO_ULTIMO_SOCIO), telefono));
 
-                                        Toast.makeText(getActivity(), getResources().getString(R.string.exito_añadir), Toast.LENGTH_SHORT).show();
+                                        Socio s = new Socio();
+
+                                        //creamos un socio a partir de los datos
+                                        s.setImagen("");
+                                        s.setDireccion(direccion);
+                                        s.setDni(dni);
+                                        s.setEmail(email);
+                                        s.setNombre(nombre);
+                                        s.setQuota(quota);
+                                        s.setTelefono(telefono);
+                                        s.setPoblacion(poblacion);
+                                        s.setSocio(String.valueOf(NUMERO_ULTIMO_SOCIO));
+
+                                        //añadimos un nuevo usuario
+                                        ref.child(nombre).setValue(s);
+
+                                        Toast.makeText(getActivity(), getResources().getString(R.string.exito_añadir)+ nombre, Toast.LENGTH_LONG).show();
 
                                         //salimos del actual fragment
-                                        getFragmentManager().popBackStack();
+                                        getFragmentManager().beginTransaction()
+                                                .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
+                                                        R.anim.enter_from_right, R.anim.exit_to_left)
+                                                .replace(R.id.contenido, new SociosFragment()).commit();
                                     }
                                 })
                                 .show();
@@ -191,7 +208,7 @@ public class NewUserFragment extends Fragment {
     }
 
     private boolean validar(String nombre, String dni, String email, String direccion, String poblacion, String telefono) {
-        if (!validarnombre(nombre)) {
+        if (!validarVacio(nombre)) {
             txfNombre.requestFocus();
             txfNombre.setError(getResources().getString(R.string.error_nombre));
             return false;
@@ -231,16 +248,10 @@ public class NewUserFragment extends Fragment {
         return true;
     }
 
-    private boolean validarnombre(String nombre) {
-        Pattern patron = Pattern.compile("^[a-zñA-Z\\s]{5,40}$");
-
-        return patron.matcher(nombre).matches();
-    }
-
     private boolean validarVacio(String nombre) {
-        if (nombre.length() > 60 || nombre.isEmpty()){
-            return  false;
-        }else {
+        if (nombre.length() > 80 || nombre.isEmpty()) {
+            return false;
+        } else {
             return true;
         }
     }

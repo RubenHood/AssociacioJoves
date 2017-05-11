@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
@@ -139,9 +140,9 @@ public class DetalleFragment extends Fragment {
         txfSocio.setText(socio.getSocio());
 
         //comprobamos si el socio ha pagado, para checkar o no el switch
-        if(socio.getQuota().equals("PAGADO")){
+        if (socio.getQuota().equals("PAGADO")) {
             swSwitch.setChecked(true);
-        }else{
+        } else {
             swSwitch.setChecked(false);
         }
 
@@ -175,7 +176,7 @@ public class DetalleFragment extends Fragment {
                         //escondemos el teclado virtual
                         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         View focus = getActivity().getCurrentFocus();
-                        if(focus != null)
+                        if (focus != null)
                             inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                         //Añadimos un socio al contador
@@ -190,17 +191,37 @@ public class DetalleFragment extends Fragment {
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+
+                                        Socio s = new Socio();
+
+                                        //creamos un socio a partir de los datos
+                                        s.setImagen(socio.getImagen());
+                                        s.setDireccion(direccion);
+                                        s.setDni(dni);
+                                        s.setEmail(email);
+                                        s.setNombre(nombre);
+                                        s.setQuota(quota);
+                                        s.setTelefono(telefono);
+                                        s.setPoblacion(poblacion);
+                                        s.setSocio(socio.getSocio());
+
                                         //añadimos un nuevo usuario
-                                        ref.child(socio.getSocio()).setValue(new Socio(direccion, dni, email, nombre, poblacion, quota, socio.getSocio(), telefono));
+                                        ref.child(socio.getNombre()).setValue(s);
+
+                                        Toast.makeText(getActivity(), getResources().getString(R.string.exito_actualizar)+ nombre, Toast.LENGTH_LONG).show();
 
                                         //salimos del actual fragment
-                                        getFragmentManager().popBackStack();
+                                        getFragmentManager().beginTransaction()
+                                                .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
+                                                        R.anim.enter_from_right, R.anim.exit_to_left)
+                                                .replace(R.id.contenido, new SociosFragment()).commit();
                                     }
                                 })
                                 .show();
 
                     }
                 } catch (Exception e) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_añadir), Toast.LENGTH_SHORT).show();
                     FirebaseCrash.log(e.getMessage());
                 }
             }
@@ -215,7 +236,7 @@ public class DetalleFragment extends Fragment {
     }
 
     private boolean validar(String nombre, String dni, String email, String direccion, String poblacion, String telefono) {
-        if (!validarnombre(nombre)) {
+        if (!validarVacio(nombre)) {
             txfNombre.requestFocus();
             txfNombre.setError(getResources().getString(R.string.error_nombre));
             return false;
@@ -255,16 +276,10 @@ public class DetalleFragment extends Fragment {
         return true;
     }
 
-    private boolean validarnombre(String nombre) {
-        Pattern patron = Pattern.compile("^[a-zñA-Z\\s]{5,40}$");
-
-        return patron.matcher(nombre).matches();
-    }
-
     private boolean validarVacio(String nombre) {
-        if (nombre.length() > 60 || nombre.isEmpty()){
-            return  false;
-        }else {
+        if (nombre.length() > 80 || nombre.isEmpty()) {
+            return false;
+        } else {
             return true;
         }
     }

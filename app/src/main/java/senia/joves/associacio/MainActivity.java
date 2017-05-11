@@ -35,8 +35,7 @@ public class MainActivity extends AppCompatActivity {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                                             R.anim.enter_from_left, R.anim.exit_to_right)
-                                    .replace(R.id.contenido, new SociosFragment())
-                                    .addToBackStack("sociosFragment").commit();
+                                    .replace(R.id.contenido, new SociosFragment()).commit();
                         }
 
                         return true;
@@ -47,14 +46,12 @@ public class MainActivity extends AppCompatActivity {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                                             R.anim.enter_from_left, R.anim.exit_to_right)
-                                    .replace(R.id.contenido, new EventosFragment())
-                                    .addToBackStack("eventosFragment").commit();
+                                    .replace(R.id.contenido, new EventosFragment()).commit();
                         } else if (navigation.getSelectedItemId() == R.id.socios) {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
                                             R.anim.enter_from_right, R.anim.exit_to_left)
-                                    .replace(R.id.contenido, new EventosFragment())
-                                    .addToBackStack("eventosFragment").commit();
+                                    .replace(R.id.contenido, new EventosFragment()).commit();
                         }
                         return true;
                     case R.id.noticias:
@@ -64,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
                                             R.anim.enter_from_right, R.anim.exit_to_left)
-                                    .replace(R.id.contenido, new NoticiasFragment())
-                                    .addToBackStack("noticiasFragment").commit();
+                                    .replace(R.id.contenido, new NoticiasFragment()).commit();
                         }
                         return true;
                 }
@@ -74,24 +70,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //cargamos el fragment de noticias que va el primero
-        getSupportFragmentManager().beginTransaction().replace(R.id.contenido, new NoticiasFragment())
-                .addToBackStack("noticiasFragment").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenido, new NoticiasFragment()).commit();
     }
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setIcon(R.drawable.salir)
-                .setTitle(R.string.titulo_back)
-                .setMessage(R.string.texto_back)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Salir
-                        finishAffinity();
-                    }
-                })
-                .show();
+
+        if(getSupportFragmentManager().getBackStackEntryCount() > 0){
+
+            getSupportFragmentManager().popBackStack();
+
+        }else {
+            new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.salir)
+                    .setTitle(R.string.titulo_back)
+                    .setMessage(R.string.texto_back)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Salir
+                            finishAffinity();
+                        }
+                    })
+                    .show();
+        }
+
     }
 }

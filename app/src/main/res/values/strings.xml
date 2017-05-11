@@ -37,7 +37,9 @@
     <string name="lbl_telefono">Teléfono:</string>
     <string name="lbl_dni">DNI:</string>
     <string name="menu_opcion_buscar">buscar</string>
-    <string name="exito_añadir">Ha añadido correctamente a:</string>
+    <string name="exito_actualizar">Ha actualizado correctamente a:\n</string>
+    <string name="exito_añadir">Ha añadido correctamente a:\n</string>
+    <string name="error_actualizar">Ha ocurrido un error al actualizar los datos.</string>
     <string name="error_añadir">Ha ocurrido un error al insertar datos.</string>
     <string name="lbl_pagado">Cuota</string>
     <string-array name="prueba">
