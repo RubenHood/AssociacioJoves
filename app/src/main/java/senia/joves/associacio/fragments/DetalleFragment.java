@@ -191,10 +191,10 @@ public class DetalleFragment extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         //añadimos un nuevo usuario
-//                                        ref.child(String.valueOf(NUMERO_ULTIMO_SOCIO)).setValue(new Socio(direccion, dni, email, nombre, poblacion, quota, String.valueOf(NUMERO_ULTIMO_SOCIO), telefono));
-//
-//                                        //salimos del actual fragment
-//                                        getFragmentManager().popBackStack();
+                                        ref.child(socio.getSocio()).setValue(new Socio(direccion, dni, email, nombre, poblacion, quota, socio.getSocio(), telefono));
+
+                                        //salimos del actual fragment
+                                        getFragmentManager().popBackStack();
                                     }
                                 })
                                 .show();

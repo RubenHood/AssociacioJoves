@@ -4,8 +4,8 @@
     <string name="titulo_back">Salir</string>
     <string name="titulo_actualizar">Actualizar Socio</string>
     <string name="titulo_añadir">Insertar Socio</string>
-    <string name="texto_añadir">Desea insertar el registro?</string>
-    <string name="texto_actualizar">Está seguro que desea actualizar el socio?</string>
+    <string name="texto_añadir">Se va a proceder a insertar los datos. Desea continuar?</string>
+    <string name="texto_actualizar">Se va a proceder a actualizar los datos. Está seguro que desea actualizar el socio?</string>
     <string name="error_no_internet">No hay conexión a internet, reintentando en 10 segundos.....</string>
     <string name="error_no_login">Email o contraseña erróneos…</string>
     <string name="error_email">Debe escribir un email correcto.</string>

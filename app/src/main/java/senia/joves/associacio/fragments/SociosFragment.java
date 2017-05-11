@@ -87,6 +87,7 @@ public class SociosFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 String text = newText;
@@ -173,6 +174,10 @@ public class SociosFragment extends Fragment {
         postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //contamos los socios que hay para saber que id poner luego
+                NUMERO_ULTIMO_SOCIO = (int) dataSnapshot.getChildrenCount();
+
                 // recogemos los datos
                 obtenerSocios(dataSnapshot);
 
@@ -216,8 +221,6 @@ public class SociosFragment extends Fragment {
             //metemos el objeto en el array
             LISTA_SOCIOS.add(s);
         }
-        //almacenamos el numero del ultimo socio Todo
-//        NUMERO_ULTIMO_SOCIO = Integer.getInteger(LISTA_SOCIOS.get(LISTA_SOCIOS.size()).getSocio());
     }
 
     //metodo que a partir del array, rellenamos la interfaz
@@ -283,7 +286,7 @@ public class SociosFragment extends Fragment {
         super.onStart();
         try {
             mDatabase.orderByChild("nombre").addValueEventListener(postListener);
-        }catch (Exception e ){
+        } catch (Exception e) {
             FirebaseCrash.log(e.getMessage());
         }
     }
