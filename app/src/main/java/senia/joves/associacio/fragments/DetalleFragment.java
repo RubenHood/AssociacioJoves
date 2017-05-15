@@ -3,12 +3,16 @@ package senia.joves.associacio.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -24,15 +29,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.regex.Pattern;
 
 import senia.joves.associacio.LoginActivity;
-import senia.joves.associacio.MainActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 
-import static senia.joves.associacio.fragments.SociosFragment.NUMERO_ULTIMO_SOCIO;
+import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
 
 /**
  * Created by Ruben on 08/05/2017.
@@ -57,6 +66,12 @@ public class DetalleFragment extends Fragment {
     //variable que almacena el socio que llega
     private Socio socio;
 
+    //variable para la imagen del toolbar
+    ImageView img_perfil;
+
+    AppBarLayout appBarLayout;
+
+    //constructor vacio necesario
     public DetalleFragment() {
 
     }
@@ -101,14 +116,39 @@ public class DetalleFragment extends Fragment {
         //activamos la modificacion del appbar
         setHasOptionsMenu(true);
 
+        View rootView = inflater.inflate(R.layout.fragment_detalle, container, false);
+
+        final Toolbar mToolbar = (Toolbar) rootView.findViewById(R.id.toolbarDetalle);
+        if (mToolbar != null) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        }
+
+        //saber si el appbar layout esta colapsado o no
+        appBarLayout = (AppBarLayout) rootView.findViewById(R.id.app_bar);
+        final CollapsingToolbarLayout c = (CollapsingToolbarLayout) rootView.findViewById(R.id.toolbar_layout);
+
+        //cambiamos la foto del toolbar
+        img_perfil = (ImageView) rootView.findViewById(R.id.imageTitulo);
+
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+
+        try{
+            BitMatrix bitMatrix = multiFormatWriter.encode(socio.getNombre(), BarcodeFormat.QR_CODE, 400,400);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+            img_perfil.setImageBitmap(bitmap);
+        }
+        catch (WriterException e){
+            e.printStackTrace();
+        }
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(" ");
+
         //añadimos el boton de ir atras
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //añadimos el titulo al toolbar
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(socio.getNombre());
-
-        return inflater.inflate(R.layout.fragment_detalle, container, false);
+        return rootView;
     }
 
     @Override
@@ -208,7 +248,7 @@ public class DetalleFragment extends Fragment {
                                         //añadimos un nuevo usuario
                                         ref.child(socio.getNombre()).setValue(s);
 
-                                        Toast.makeText(getActivity(), getResources().getString(R.string.exito_actualizar)+ nombre, Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), getResources().getString(R.string.exito_actualizar) + nombre, Toast.LENGTH_LONG).show();
 
                                         //salimos del actual fragment
                                         getFragmentManager().beginTransaction()
@@ -227,11 +267,15 @@ public class DetalleFragment extends Fragment {
             }
         });
 
+
+
+
     }
 
     @Override
     public void onDestroy() {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
         super.onDestroy();
     }
 

@@ -21,7 +21,7 @@ import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 import senia.joves.associacio.librerias.ImagenCircular;
 
-import static senia.joves.associacio.fragments.SociosFragment.ARRAY_RECIBIDO;
+import static senia.joves.associacio.Static.Recursos.ARRAY_RECIBIDO;
 
 public class AdaptadorSocios extends BaseAdapter {
 

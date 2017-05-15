@@ -5,12 +5,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <ListView
-        android:id="@+id/listaSocios"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@android:color/transparent"/>
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarSocios"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/AppTheme.AppBarOverlay"
+            app:theme="@style/AppTheme.AppBarOverlay"/>
+
+
+        <ListView
+            android:id="@+id/listaSocios"
+            android:layout_width="match_parent"
+            android:layout_height="511dp"
+            android:divider="@android:color/transparent" />
+
+
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/anadirSocio"

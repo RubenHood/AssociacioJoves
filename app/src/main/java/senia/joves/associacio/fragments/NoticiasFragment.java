@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,14 +53,21 @@ public class NoticiasFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        View rootView = inflater.inflate(R.layout.fragment_noticias, container, false);
+
         //activamos la modificacion del appbar
         setHasOptionsMenu(true);
+
+        Toolbar mToolbar = (Toolbar) rootView.findViewById(R.id.toolbarNoticias);
+        if (mToolbar != null) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        }
 
         //añadimos la descripcion al toolbar
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.titulo_noticias));
 
         //devolvemos la vista inflada
-        return inflater.inflate(R.layout.fragment_noticias, container, false);
+        return rootView;
     }
 
     @Override

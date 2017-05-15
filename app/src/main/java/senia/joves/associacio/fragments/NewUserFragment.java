@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,7 +33,7 @@ import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 
-import static senia.joves.associacio.fragments.SociosFragment.NUMERO_ULTIMO_SOCIO;
+import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
 
 /**
  * Created by Ruben on 08/05/2017.
@@ -85,10 +86,17 @@ public class NewUserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        View rootView = inflater.inflate(R.layout.fragment_nuevo_socio, container, false);
+
         ref = FirebaseDatabase.getInstance().getReference("socios");
 
         //activamos la modificacion del appbar
         setHasOptionsMenu(true);
+
+        Toolbar mToolbar = (Toolbar) rootView.findViewById(R.id.toolbarNuevo);
+        if (mToolbar != null) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        }
 
         //añadimos el boton de ir atras
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
@@ -97,7 +105,7 @@ public class NewUserFragment extends Fragment {
         //añadimos el titulo al toolbar
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.titulo_nuevo));
 
-        return inflater.inflate(R.layout.fragment_nuevo_socio, container, false);
+        return rootView;
     }
 
     @Override

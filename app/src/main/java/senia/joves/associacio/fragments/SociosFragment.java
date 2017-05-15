@@ -5,12 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +21,6 @@ import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +35,10 @@ import senia.joves.associacio.R;
 import senia.joves.associacio.adaptadores.AdaptadorSocios;
 import senia.joves.associacio.entidades.Socio;
 
+import static senia.joves.associacio.Static.Recursos.LISTA_SOCIOS;
+import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
+import static senia.joves.associacio.Static.Recursos.ARRAY_RECIBIDO;
+
 /**
  * Created by Usuario on 08/05/2017.
  */
@@ -44,12 +46,6 @@ import senia.joves.associacio.entidades.Socio;
 public class SociosFragment extends Fragment {
 
     //Datos compartidos
-    //Array que almacena todos los socios
-    public static ArrayList<Socio> LISTA_SOCIOS;
-    public static int NUMERO_ULTIMO_SOCIO = 0;
-    //Variable para el array que recibimos en el adaptador
-    public static ArrayList<Socio> ARRAY_RECIBIDO = new ArrayList<>();
-    //FIN DE DATOS COMPARTIDOS
 
     //variable para el progress dialog
     private ProgressDialog mProgressDialog;
@@ -119,8 +115,15 @@ public class SociosFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_socios, container, false);
+
         //activamos la modificacion del appbar
         setHasOptionsMenu(true);
+
+        Toolbar mToolbar = (Toolbar) rootView.findViewById(R.id.toolbarSocios);
+        if (mToolbar != null) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        }
 
         //añadimos la descripcion al toolbar
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.titulo_socios));
@@ -129,10 +132,9 @@ public class SociosFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("socios");
 
         //iniciamos el array
-        LISTA_SOCIOS = new ArrayList<>();
 
         //devolvemos la vista inflada
-        return inflater.inflate(R.layout.fragment_socios, container, false);
+        return rootView;
 
     }
 
@@ -141,14 +143,17 @@ public class SociosFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //comprobamos si esta lleno el array, para consultar FIREBASE
-        if (LISTA_SOCIOS.isEmpty() || LISTA_SOCIOS == null) {
+        if (LISTA_SOCIOS.isEmpty()) {
             //mostramos un barra de progreso
             mostrarCarga();
 
             // Leemos de la RealTime Database Firebase
             consultaSocios();
+
+            System.out.println("rellenar");
         } else {
             //rellenamos el interfaz
+            System.out.println("listar");
             rellenarInterfaz();
         }
 
@@ -258,6 +263,7 @@ public class SociosFragment extends Fragment {
                                 R.anim.enter_from_left, R.anim.exit_to_right)
                         .replace(R.id.contenido, df)
                         .addToBackStack("detalleFragment").commit();
+
             }
         });
     }
@@ -302,6 +308,9 @@ public class SociosFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mDatabase.removeEventListener(postListener);
+        if(postListener != null){
+            mDatabase.removeEventListener(postListener);
+        }
+
     }
 }

@@ -23,8 +23,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".StorageActivity"></activity>
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".StorageActivity" />
     </application>
 
 </manifest>

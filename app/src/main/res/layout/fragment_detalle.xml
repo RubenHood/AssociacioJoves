@@ -5,6 +5,249 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="false"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="false"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <ImageView
+                android:id="@+id/imageTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/no_perfil" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbarDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layout_nombre_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="false"
+                android:layout_marginLeft="27dp"
+                android:layout_marginRight="27dp"
+                android:layout_marginTop="5dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txfNombre_d"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lbl_nombre"
+                    android:inputType="textPersonName"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black"
+                    android:textColorLink="@android:color/holo_red_dark" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layout_dni_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/layout_nombre_d"
+                android:layout_alignLeft="@+id/layout_nombre_d"
+                android:layout_alignRight="@+id/layout_nombre_d"
+                android:layout_alignStart="@+id/layout_nombre_d"
+                android:layout_below="@+id/layout_nombre_d"
+                android:layout_marginTop="10dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txfDni_d"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lbl_dni"
+                    android:inputType="textPersonName"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layout_email_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/layout_dni_d"
+                android:layout_alignLeft="@+id/layout_dni_d"
+                android:layout_alignRight="@+id/layout_dni_d"
+                android:layout_alignStart="@+id/layout_dni_d"
+                android:layout_below="@+id/layout_dni_d"
+                android:layout_marginTop="10dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txfEmail_d"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lbl_email"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layout_direccion_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/layout_email_d"
+                android:layout_alignLeft="@+id/layout_email_d"
+                android:layout_alignRight="@+id/layout_email_d"
+                android:layout_alignStart="@+id/layout_email_d"
+                android:layout_below="@+id/layout_email_d"
+                android:layout_marginTop="10dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txfDireccion_d"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lbl_direccion"
+                    android:inputType="textPersonName"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layout_poblacion_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/layout_direccion_d"
+                android:layout_alignLeft="@+id/layout_direccion_d"
+                android:layout_alignRight="@+id/layout_direccion_d"
+                android:layout_alignStart="@+id/layout_direccion_d"
+                android:layout_below="@+id/layout_direccion_d"
+                android:layout_marginTop="10dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txfPoblacion_d"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lbl_poblacion"
+                    android:inputType="textPersonName"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layout_telefono_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/layout_poblacion_d"
+                android:layout_alignLeft="@+id/layout_poblacion_d"
+                android:layout_alignRight="@+id/layout_poblacion_d"
+                android:layout_alignStart="@+id/layout_poblacion_d"
+                android:layout_below="@+id/layout_poblacion_d"
+                android:layout_marginTop="10dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txfTelefono_d"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/lbl_telefono"
+                    android:inputType="phone"
+                    android:maxLength="9"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layout_socio_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_telefono_d"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/swPagado_d"
+                android:layout_toRightOf="@+id/swPagado_d">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txfsocio_d"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/layout_socio_d"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignStart="@+id/layout_socio_d"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/lbl_socio"
+                    android:inputType="phone"
+                    android:maxLength="9"
+                    android:maxLines="1"
+                    android:selectAllOnFocus="true"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Switch
+                android:id="@+id/swPagado_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/layout_socio_d"
+                android:layout_alignLeft="@+id/layout_telefono_d"
+                android:layout_alignStart="@+id/layout_telefono_d"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/lbl_pagado" />
+
+        </RelativeLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_d"
         android:layout_width="wrap_content"
@@ -13,204 +256,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_action_save" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/layout_nombre_d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="false"
-            android:layout_marginLeft="27dp"
-            android:layout_marginRight="27dp"
-            android:layout_marginTop="5dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/txfNombre_d"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/lbl_nombre"
-                android:inputType="textPersonName"
-                android:maxLength="40"
-                android:maxLines="1"
-                android:selectAllOnFocus="true"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black"
-                android:textColorLink="@android:color/holo_red_dark" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/layout_dni_d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/layout_nombre_d"
-            android:layout_alignLeft="@+id/layout_nombre_d"
-            android:layout_alignRight="@+id/layout_nombre_d"
-            android:layout_alignStart="@+id/layout_nombre_d"
-            android:layout_below="@+id/layout_nombre_d"
-            android:layout_marginTop="10dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/txfDni_d"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/lbl_dni"
-                android:inputType="textPersonName"
-                android:maxLength="40"
-                android:maxLines="1"
-                android:selectAllOnFocus="true"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/layout_email_d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/layout_dni_d"
-            android:layout_alignLeft="@+id/layout_dni_d"
-            android:layout_alignRight="@+id/layout_dni_d"
-            android:layout_alignStart="@+id/layout_dni_d"
-            android:layout_below="@+id/layout_dni_d"
-            android:layout_marginTop="10dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/txfEmail_d"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/lbl_email"
-                android:inputType="textEmailAddress"
-                android:maxLength="40"
-                android:maxLines="1"
-                android:selectAllOnFocus="true"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/layout_direccion_d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/layout_email_d"
-            android:layout_alignLeft="@+id/layout_email_d"
-            android:layout_alignRight="@+id/layout_email_d"
-            android:layout_alignStart="@+id/layout_email_d"
-            android:layout_below="@+id/layout_email_d"
-            android:layout_marginTop="10dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/txfDireccion_d"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/lbl_direccion"
-                android:inputType="textPersonName"
-                android:maxLength="40"
-                android:maxLines="1"
-                android:selectAllOnFocus="true"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/layout_poblacion_d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/layout_direccion_d"
-            android:layout_alignLeft="@+id/layout_direccion_d"
-            android:layout_alignRight="@+id/layout_direccion_d"
-            android:layout_alignStart="@+id/layout_direccion_d"
-            android:layout_below="@+id/layout_direccion_d"
-            android:layout_marginTop="10dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/txfPoblacion_d"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/lbl_poblacion"
-                android:inputType="textPersonName"
-                android:maxLength="40"
-                android:maxLines="1"
-                android:selectAllOnFocus="true"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-
-        </android.support.design.widget.TextInputLayout>
-
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/layout_telefono_d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/layout_poblacion_d"
-            android:layout_alignLeft="@+id/layout_poblacion_d"
-            android:layout_alignRight="@+id/layout_poblacion_d"
-            android:layout_alignStart="@+id/layout_poblacion_d"
-            android:layout_below="@+id/layout_poblacion_d"
-            android:layout_marginTop="10dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/txfTelefono_d"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/lbl_telefono"
-                android:inputType="phone"
-                android:maxLength="9"
-                android:maxLines="1"
-                android:selectAllOnFocus="true"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/layout_socio_d"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_telefono_d"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@+id/swPagado_d"
-            android:layout_toRightOf="@+id/swPagado_d">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/txfsocio_d"
-                android:layout_width="75dp"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/layout_socio_d"
-                android:layout_alignParentBottom="true"
-                android:layout_alignStart="@+id/layout_socio_d"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="1"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="@string/lbl_socio"
-                android:inputType="phone"
-                android:maxLength="9"
-                android:maxLines="1"
-                android:selectAllOnFocus="true"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
-
-        <Switch
-            android:id="@+id/swPagado_d"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/layout_socio_d"
-            android:layout_alignLeft="@+id/layout_telefono_d"
-            android:layout_alignStart="@+id/layout_telefono_d"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="@string/lbl_pagado" />
-
-    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
