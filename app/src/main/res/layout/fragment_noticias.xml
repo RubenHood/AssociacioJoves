@@ -9,7 +9,7 @@
         android:id="@+id/toolbarNoticias"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/status_bar"
         app:layout_collapseMode="parallax"
         app:popupTheme="@style/AppTheme.AppBarOverlay"
         app:theme="@style/AppTheme.AppBarOverlay" />

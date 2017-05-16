@@ -14,15 +14,15 @@
             android:id="@+id/toolbarSocios"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
+            android:background="@color/status_bar"
             app:popupTheme="@style/AppTheme.AppBarOverlay"
-            app:theme="@style/AppTheme.AppBarOverlay"/>
+            app:theme="@style/AppTheme.AppBarOverlay" />
 
 
         <ListView
             android:id="@+id/listaSocios"
             android:layout_width="match_parent"
-            android:layout_height="511dp"
+            android:layout_height="match_parent"
             android:divider="@android:color/transparent" />
 
 

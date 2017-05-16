@@ -131,8 +131,6 @@ public class SociosFragment extends Fragment {
         //referencia a la base de datos
         mDatabase = FirebaseDatabase.getInstance().getReference().child("socios");
 
-        //iniciamos el array
-
         //devolvemos la vista inflada
         return rootView;
 
@@ -142,20 +140,11 @@ public class SociosFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //comprobamos si esta lleno el array, para consultar FIREBASE
-        if (LISTA_SOCIOS.isEmpty()) {
-            //mostramos un barra de progreso
-            mostrarCarga();
+        //mostramos un barra de progreso
+        mostrarCarga();
 
-            // Leemos de la RealTime Database Firebase
-            consultaSocios();
-
-            System.out.println("rellenar");
-        } else {
-            //rellenamos el interfaz
-            System.out.println("listar");
-            rellenarInterfaz();
-        }
+        // Leemos de la RealTime Database Firebase
+        consultaSocios();
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.anadirSocio);
 
@@ -235,8 +224,14 @@ public class SociosFragment extends Fragment {
         //capturamos la lista
         lstLista = (ListView) getActivity().findViewById(R.id.listaSocios);
 
+        //Limpiamos el array que vamos a enviar al adaptador
+        ARRAY_RECIBIDO.clear();
+
+        //copiamos el array original, para mandarlo al adaptador
+        ARRAY_RECIBIDO.addAll(LISTA_SOCIOS);
+
         //creamos un adaptador a partir del Array lleno y el contexto
-        ad = new AdaptadorSocios(getActivity(), LISTA_SOCIOS);
+        ad = new AdaptadorSocios(getActivity());
 
         //pasamos el adapter a la lista
         lstLista.setAdapter(ad);
@@ -299,16 +294,9 @@ public class SociosFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        //igualamos las variables
-        ARRAY_RECIBIDO = LISTA_SOCIOS;
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
-        if(postListener != null){
+        if (postListener != null) {
             mDatabase.removeEventListener(postListener);
         }
 

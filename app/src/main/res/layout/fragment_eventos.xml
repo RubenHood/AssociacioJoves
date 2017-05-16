@@ -9,13 +9,8 @@
         android:id="@+id/toolbarEventos"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/status_bar"
         app:popupTheme="@style/AppTheme.AppBarOverlay"
-        app:theme="@style/AppTheme.AppBarOverlay"/>/>
+        app:theme="@style/AppTheme.AppBarOverlay" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="eventos" />
 </LinearLayout>

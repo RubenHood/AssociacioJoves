@@ -21,6 +21,7 @@ import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 import senia.joves.associacio.librerias.ImagenCircular;
 
+//array que recibimos desde Sociosfragment
 import static senia.joves.associacio.Static.Recursos.ARRAY_RECIBIDO;
 
 public class AdaptadorSocios extends BaseAdapter {
@@ -30,11 +31,10 @@ public class AdaptadorSocios extends BaseAdapter {
     //variable para el filtrado
     private ArrayList<Socio> arrayApoyo;
 
-    public AdaptadorSocios(Context context, ArrayList<Socio> items) {
-        ARRAY_RECIBIDO = items;
+    public AdaptadorSocios(Context context) {
         this.context = context;
         this.arrayApoyo = new ArrayList<>();
-        this.arrayApoyo.addAll(items);
+        this.arrayApoyo.addAll(ARRAY_RECIBIDO);
     }
 
     @Override

@@ -11,6 +11,7 @@
         android:layout_height="70dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        app:cardBackgroundColor="@color/cardview_dark_background"
         app:cardElevation="3dp"
         app:cardUseCompatPadding="true">
 
@@ -19,26 +20,15 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/fondo"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/fondo_fila" />
-
-            <ImageView
                 android:id="@+id/icono"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="17dp"
                 android:layout_marginLeft="17dp"
-                app:srcCompat="@color/common_google_signin_btn_text_dark_focused"/>
+                android:layout_marginStart="17dp"
+                app:srcCompat="@color/common_google_signin_btn_text_dark_focused" />
 
             <TextView
                 android:id="@+id/nombre"
@@ -50,8 +40,7 @@
                 android:layout_toEndOf="@+id/icono"
                 android:layout_toRightOf="@+id/icono"
                 android:fontFamily="sans-serif-smallcaps"
-                android:text="Roberto Marquez Moreno"
-                android:textColor="@color/cardview_dark_background" />
+                android:textColor="@android:color/white" />
 
             <ImageView
                 android:id="@+id/pagado"

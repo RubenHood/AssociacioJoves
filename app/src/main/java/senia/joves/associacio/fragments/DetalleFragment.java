@@ -41,8 +41,6 @@ import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 
-import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
-
 /**
  * Created by Ruben on 08/05/2017.
  */
@@ -219,9 +217,6 @@ public class DetalleFragment extends Fragment {
                         if (focus != null)
                             inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                        //Añadimos un socio al contador
-                        NUMERO_ULTIMO_SOCIO++;
-
                         //mostramos un dialogo para preguntar si estamos seguro de actualizar el registro
                         new AlertDialog.Builder(getActivity())
                                 .setIcon(R.drawable.ic_action_person)
@@ -245,9 +240,12 @@ public class DetalleFragment extends Fragment {
                                         s.setPoblacion(poblacion);
                                         s.setSocio(socio.getSocio());
 
+
+
                                         //añadimos un nuevo usuario
                                         ref.child(socio.getNombre()).setValue(s);
 
+                                        //mostramos un mensaje de exito
                                         Toast.makeText(getActivity(), getResources().getString(R.string.exito_actualizar) + nombre, Toast.LENGTH_LONG).show();
 
                                         //salimos del actual fragment
