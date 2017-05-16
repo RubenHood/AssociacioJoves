@@ -1,8 +1,12 @@
 package senia.joves.associacio.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,7 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -27,6 +33,8 @@ import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.regex.Pattern;
 
 import senia.joves.associacio.LoginActivity;
@@ -41,6 +49,9 @@ import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
 
 public class NewUserFragment extends Fragment {
 
+    //variable para almacenar el nombre del archivo
+    private static final int SELECT_FILE = 1;
+
     //referencias a componentes de la vista
     private EditText txfNombre;
     private EditText txfDni;
@@ -50,6 +61,7 @@ public class NewUserFragment extends Fragment {
     private EditText txfTelefono;
     private Switch swSwitch;
     private FloatingActionButton fab;
+    private ImageView imgPerfil;
 
     //referencia a la bd
     DatabaseReference ref;
@@ -103,8 +115,9 @@ public class NewUserFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //añadimos el titulo al toolbar
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.titulo_nuevo));
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.titulo_nuevo));
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(" ");
         return rootView;
     }
 
@@ -121,10 +134,22 @@ public class NewUserFragment extends Fragment {
         txfTelefono = (EditText) getActivity().findViewById(R.id.txfTelefono);
         swSwitch = (Switch) getActivity().findViewById(R.id.swPagado);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        imgPerfil = (ImageView) getActivity().findViewById(R.id.imgNuevoSocio);
 
         //modificamos el tamaño del switch
         swSwitch.setSwitchMinWidth(200);
         swSwitch.setSwitchPadding(20);
+
+        imgPerfil.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                abrirGaleria(v);
+                return false;
+
+            }
+        });
+
 
         //listener para cuando clicamos en el boton flotante
         //añadimos un socio nuevo en firebase
@@ -187,7 +212,7 @@ public class NewUserFragment extends Fragment {
                                         //añadimos un nuevo usuario
                                         ref.child(nombre).setValue(s);
 
-                                        Toast.makeText(getActivity(), getResources().getString(R.string.exito_añadir)+ nombre, Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), getResources().getString(R.string.exito_añadir) + nombre, Toast.LENGTH_LONG).show();
 
                                         //salimos del actual fragment
                                         getFragmentManager().beginTransaction()
@@ -213,6 +238,51 @@ public class NewUserFragment extends Fragment {
     public void onDestroy() {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         super.onDestroy();
+    }
+
+    //Metodo que abre la galeria del sistema
+    public void abrirGaleria(View v) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(intent, "Seleccione una imagen"), 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Uri selectedImageUri = null;
+        Uri selectedImage;
+
+        String filePath = null;
+        switch (requestCode) {
+            case SELECT_FILE:
+                if (resultCode == Activity.RESULT_OK) {
+                    selectedImage = data.getData();
+                    String selectedPath = selectedImage.getPath();
+                    if (requestCode == SELECT_FILE) {
+
+                        if (selectedPath != null) {
+                            InputStream imageStream = null;
+                            try {
+                                imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+
+                            // Transformamos la URI de la imagen a inputStream y este a un Bitmap
+                            Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+
+                            // Ponemos nuestro bitmap en un ImageView que tengamos en la vista
+                            imgPerfil.setImageBitmap(bmp);
+
+                        }
+                    }
+                }
+                break;
+        }
     }
 
     private boolean validar(String nombre, String dni, String email, String direccion, String poblacion, String telefono) {
