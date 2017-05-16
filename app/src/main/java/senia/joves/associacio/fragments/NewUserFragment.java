@@ -144,7 +144,7 @@ public class NewUserFragment extends Fragment {
             @Override
             public boolean onLongClick(View v) {
 
-                abrirGaleria(v);
+                new FotoDialog().show(getFragmentManager(),"foto");
                 return false;
 
             }
