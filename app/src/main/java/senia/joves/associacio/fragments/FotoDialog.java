@@ -31,18 +31,6 @@ public class FotoDialog extends DialogFragment {
 
         View rootView = inflater.inflate(R.layout.dialog_foto, container, false);
 
-        //capturamos la lista
-        listaDialogo = (ListView) getActivity().findViewById(R.id.listaDialogo);
-
-        LISTA_DIALOGO.add(new ItemDialogo(R.drawable.ic_action_camera_alt, "Camara"));
-        LISTA_DIALOGO.add(new ItemDialogo(R.drawable.gallery, "Galeria"));
-
-        //creamos un adaptador a partir del Array lleno y el contexto
-        AdaptadorDialogoFotos ad = new AdaptadorDialogoFotos(getActivity(), LISTA_DIALOGO);
-
-        //pasamos el adapter a la lista
-        listaDialogo.setAdapter(ad);
-
         return rootView;
     }
 
@@ -50,6 +38,27 @@ public class FotoDialog extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //capturamos la lista
+        listaDialogo = (ListView) view.findViewById(R.id.listaDialogo);
 
+        //limpiamos la lista
+        LISTA_DIALOGO.clear();
+
+        //añadimos dos items para la lista
+        LISTA_DIALOGO.add(new ItemDialogo("camara", getActivity().getResources().getString(R.string.texto_camara)));
+        LISTA_DIALOGO.add(new ItemDialogo("galeria", getActivity().getResources().getString(R.string.texto_galeria)));
+
+        //creamos un adaptador a partir del Array lleno y el contexto
+        AdaptadorDialogoFotos ad = new AdaptadorDialogoFotos(getActivity());
+
+        //pasamos el adapter a la lista
+        listaDialogo.setAdapter(ad);
+
+    }
+
+    @Override
+    public void onActivityCreated(Bundle arg0) {
+        super.onActivityCreated(arg0);
+        getDialog().getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
     }
 }

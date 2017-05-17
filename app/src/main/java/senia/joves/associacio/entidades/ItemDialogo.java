@@ -8,14 +8,14 @@ import java.io.Serializable;
 
 public class ItemDialogo implements Serializable {
 
-    private int icono;
+    private String icono;
     private String texto;
 
     public ItemDialogo() {
 
     }
 
-    public ItemDialogo(int icono, String texto) {
+    public ItemDialogo(String icono, String texto) {
         this.setIcono(icono);
         this.texto = texto;
 
@@ -30,11 +30,11 @@ public class ItemDialogo implements Serializable {
         this.texto = texto;
     }
 
-    public int getIcono() {
+    public String getIcono() {
         return icono;
     }
 
-    public void setIcono(int icono) {
+    public void setIcono(String icono) {
         this.icono = icono;
     }
 }
