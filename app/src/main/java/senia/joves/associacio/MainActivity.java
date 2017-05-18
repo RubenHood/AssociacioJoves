@@ -78,8 +78,9 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         if(getSupportFragmentManager().getBackStackEntryCount() > 0){
-
-            getSupportFragmentManager().popBackStack();
+            for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++){
+                getSupportFragmentManager().popBackStack();
+            }
 
         }else {
             new AlertDialog.Builder(this)

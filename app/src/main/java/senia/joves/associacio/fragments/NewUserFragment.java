@@ -1,19 +1,23 @@
 package senia.joves.associacio.fragments;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,10 +25,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -32,15 +34,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.regex.Pattern;
 
 import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 
+import static com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE;
+import static com.theartofdev.edmodo.cropper.CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE;
+import static com.theartofdev.edmodo.cropper.CropImage.getPickImageChooserIntent;
 import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
 
 /**
@@ -49,8 +53,9 @@ import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
 
 public class NewUserFragment extends Fragment {
 
+    Uri mCropImageUri;
     //variable para almacenar el nombre del archivo
-    private static final int SELECT_FILE = 1;
+
 
     //referencias a componentes de la vista
     private EditText txfNombre;
@@ -61,6 +66,7 @@ public class NewUserFragment extends Fragment {
     private EditText txfTelefono;
     private Switch swSwitch;
     private FloatingActionButton fab;
+    private FloatingActionButton fabImagenes;
     private ImageView imgPerfil;
 
     //referencia a la bd
@@ -114,9 +120,6 @@ public class NewUserFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //añadimos el titulo al toolbar
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getActivity().getResources().getString(R.string.titulo_nuevo));
-
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(" ");
         return rootView;
     }
@@ -133,29 +136,79 @@ public class NewUserFragment extends Fragment {
         txfPoblacion = (EditText) getActivity().findViewById(R.id.txfPoblacion);
         txfTelefono = (EditText) getActivity().findViewById(R.id.txfTelefono);
         swSwitch = (Switch) getActivity().findViewById(R.id.swPagado);
-        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         imgPerfil = (ImageView) getActivity().findViewById(R.id.imgNuevoSocio);
+        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fabImagenes = (FloatingActionButton) getActivity().findViewById(R.id.fabFoto);
 
         //modificamos el tamaño del switch
         swSwitch.setSwitchMinWidth(200);
         swSwitch.setSwitchPadding(20);
 
-        imgPerfil.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+        //comprobamos si hay imagen para cargarla y datos escritos anteriormente por el usuario
+//        if (getArguments() != null) {
+//            Bitmap bmp = getArguments().getParcelable("imagen");
+//            imgPerfil.setImageBitmap(bmp);
+//
+//            Socio s = (Socio) getArguments().getSerializable("socio");
+//
+//            //mostramos los datos en sus textView
+//            txfNombre.setText(s.getNombre());
+//            txfDireccion.setText(s.getDireccion());
+//            txfDni.setText(s.getDni());
+//            txfEmail.setText(s.getEmail());
+//            txfPoblacion.setText(s.getPoblacion());
+//            txfTelefono.setText(s.getTelefono());
+//        }
 
-                new FotoDialog().show(getFragmentManager(),"foto");
-                return false;
+        //listener para el boton de añadir imagenes
+        fabImagenes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //comprobamos si el movil necesita permisos, si los necesita, los pedimos. Si no abrimos el dialogo picker
+                abrirDialogo();
+
+//                CropImage.startPickImageActivity(getActivity());
+
+                //obtenemos los valores escritos por el usuario
+//                final String nombre = txfNombre.getText().toString();
+//                final String dni = txfDni.getText().toString();
+//                final String email = txfEmail.getText().toString();
+//                final String direccion = txfDireccion.getText().toString();
+//                final String poblacion = txfPoblacion.getText().toString();
+//                final String telefono = txfTelefono.getText().toString();
+//                final String quota;
+//
+//                //comprobamos que eleccion hay en el switch //si es true HA PAGADO si es false no ha pagado
+//                if (swSwitch.isChecked()) {
+//                    quota = "PAGADO";
+//                } else {
+//                    quota = "";
+//                }
+//
+//                //creamos un socio para almacenar los datos ya escritos
+//                Socio s = new Socio();
+//                s.setDireccion(direccion);
+//                s.setNombre(nombre);
+//                s.setDni(dni);
+//                s.setEmail(email);
+//                s.setPoblacion(poblacion);
+//                s.setTelefono(telefono);
+//                s.setQuota(quota);
+//
+//                //Abrimos el dialogo de añadir imagenes
+//                FotoDialog dialog = FotoDialog.newInstance(s);
+//                dialog.show(getFragmentManager(), "foto");
 
             }
         });
 
 
-        //listener para cuando clicamos en el boton flotante
-        //añadimos un socio nuevo en firebase
+        //listener para cuando clicamos en el boton flotante añadimos un socio nuevo en firebase
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 //obtenemos los valores escritos por el usuario
                 final String nombre = txfNombre.getText().toString();
                 final String dni = txfDni.getText().toString();
@@ -231,60 +284,86 @@ public class NewUserFragment extends Fragment {
                 }
             }
         });
+    }
 
+    //comprobamos los permisos para lanzar o no el dialogo de elegir imagen
+    @SuppressLint("NewApi")
+    public void abrirDialogo() {
+        if (CropImage.isExplicitCameraPermissionRequired(getActivity())) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
+        } else {
+            startPickImageActivity(getActivity());
+
+        }
+    }
+
+    //metodo que abre el dialogo de abrir imagen
+    public void startPickImageActivity(@NonNull Activity activity) {
+        this.startActivityForResult(getPickImageChooserIntent(activity), PICK_IMAGE_CHOOSER_REQUEST_CODE);
+    }
+
+    //metodo que abre la actividad para cortar la imagen
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .start(getContext(), this);
+    }
+
+    //metodo que se ejecuta al cerrarse el dialogo de los permisos
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startPickImageActivity(getActivity());
+            } else {
+                Toast.makeText(getActivity(), "Debe dar permiso a la aplicación, para poder cargar una imagen.", Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
+            if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // si ya tenemos los permisos abirmos la actividad de crop
+                startCropImageActivity(mCropImageUri);
+            } else {
+                Toast.makeText(getActivity(), "Debe dar permiso a la aplicación, para poder cargar una imagen.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    //metodo que se ejecuta al acabar de elegir imagen
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // comprobamos si tenemos permisoss y vamos a cortar la imagen
+        if (requestCode == PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri imageUri = CropImage.getPickImageResultUri(getActivity(), data);
+
+          // For API >= 23 necesitamos los permisos
+           if (CropImage.isReadExternalStoragePermissionsRequired(getActivity(), imageUri)) {
+                // request permissions and handle the result in onRequestPermissionsResult()
+                mCropImageUri = imageUri;
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
+            } else {
+            // si no requerimos permisos
+            startCropImageActivity(imageUri);
+            }
+        }
+
+        //comprobamos si venimos de cortar la imagen, entonces la mostramos al usuario, la subimos a Firebase
+        if(requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+
+        }
     }
 
     @Override
     public void onDestroy() {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
         super.onDestroy();
     }
 
-    //Metodo que abre la galeria del sistema
-    public void abrirGaleria(View v) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(
-                Intent.createChooser(intent, "Seleccione una imagen"), 1);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Uri selectedImageUri = null;
-        Uri selectedImage;
-
-        String filePath = null;
-        switch (requestCode) {
-            case SELECT_FILE:
-                if (resultCode == Activity.RESULT_OK) {
-                    selectedImage = data.getData();
-                    String selectedPath = selectedImage.getPath();
-                    if (requestCode == SELECT_FILE) {
-
-                        if (selectedPath != null) {
-                            InputStream imageStream = null;
-                            try {
-                                imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-
-                            // Transformamos la URI de la imagen a inputStream y este a un Bitmap
-                            Bitmap bmp = BitmapFactory.decodeStream(imageStream);
-
-                            // Ponemos nuestro bitmap en un ImageView que tengamos en la vista
-                            imgPerfil.setImageBitmap(bmp);
-
-                        }
-                    }
-                }
-                break;
-        }
-    }
-
+    //validar el texto
     private boolean validar(String nombre, String dni, String email, String direccion, String poblacion, String telefono) {
         if (!validarVacio(nombre)) {
             txfNombre.requestFocus();
@@ -326,6 +405,7 @@ public class NewUserFragment extends Fragment {
         return true;
     }
 
+    //Aqui los metodos que utiliza el metodo de arriba
     private boolean validarVacio(String nombre) {
         if (nombre.length() > 80 || nombre.isEmpty()) {
             return false;

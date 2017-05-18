@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="senia.joves.associacio">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,8 +28,11 @@
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenLayout|uiMode|screenSize"/>
         <activity android:name=".StorageActivity" />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
     </application>
 
 </manifest>
