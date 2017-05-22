@@ -2,6 +2,7 @@ package senia.joves.associacio.Static;
 
 import java.util.ArrayList;
 
+import senia.joves.associacio.entidades.Noticia;
 import senia.joves.associacio.entidades.Socio;
 import senia.joves.associacio.entidades.ItemDialogo;
 
@@ -25,5 +26,8 @@ public final class Recursos {
 
     //constante para darle nombre a la operacion de abrir archivo
     public static final int SELECT_FILE = 1;
+
+    //array para los objetos de la lista de noticias
+    public static final ArrayList<Noticia> LISTA_NOTICIAS = new ArrayList<>();
 
 }
