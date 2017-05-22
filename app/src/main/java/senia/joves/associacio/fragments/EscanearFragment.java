@@ -7,16 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,19 +30,14 @@ import com.squareup.picasso.Picasso;
 
 import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
-import senia.joves.associacio.adaptadores.AdaptadorSocios;
 import senia.joves.associacio.entidades.Socio;
 import senia.joves.associacio.librerias.ImagenCircular;
-
-import static senia.joves.associacio.Static.Recursos.ARRAY_RECIBIDO;
-import static senia.joves.associacio.Static.Recursos.LISTA_SOCIOS;
-import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
 
 /**
  * Created by Usuario on 08/05/2017.
  */
 
-public class EventosFragment extends Fragment {
+public class EscanearFragment extends Fragment {
 
     //variables para las vistas
     TextView nombre;
@@ -71,7 +63,7 @@ public class EventosFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_principal, menu);
+        inflater.inflate(R.menu.menu_escanear, menu);
     }
 
     @Override
@@ -83,12 +75,18 @@ public class EventosFragment extends Fragment {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getContext(), LoginActivity.class));
                 break;
+            case R.id.reintentar:
+                //recargamos la pagina
+                //mostramos un fragment en blanco
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.contenido, new EscanearFragment()).commit();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public EventosFragment() {
+    public EscanearFragment() {
 
     }
 
@@ -147,17 +145,18 @@ public class EventosFragment extends Fragment {
             //comprobas si el usuario a cancelado la foto
             if (result.getContents() == null) {
                 Toast.makeText(getActivity().getApplicationContext(), getActivity().getResources().getString(R.string.texto_cancelar_qr), Toast.LENGTH_LONG).show();
+
+                //mostramos un fragment en blanco
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.contenido, new BlankFragment()).commit();
             } else {
                 //Recogemos el resultado y lo mostramos en pantalla
-
-                //añadimos la descripcion al toolbar
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(result.getContents());
-
                 //mostramos un barra de progreso
                 mostrarCarga();
 
                 //Buscamos al socio en firebase por el string devuelto por el QR
                 consultaSocioQR(result.getContents());
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -210,25 +209,45 @@ public class EventosFragment extends Fragment {
     //metodo que a partir del array, rellenamos la interfaz
     private void rellenarInterfaz() {
 
-        //a partir del objeto Socio rellenado, rellenamos los TextViews
-        nombre.setText(socioDev.getNombre());
-        dni.setText(socioDev.getDni());
-        cuota.setText(socioDev.getQuota());
-        socio.setText(socioDev.getSocio());
-        direccion.setText(socioDev.getDireccion());
-        email.setText(socioDev.getEmail());
-        telefono.setText(socioDev.getTelefono());
-        poblacion.setText(socioDev.getPoblacion());
+        //capturamos el error
+        try {
 
-        //comprobamos si esta vacío para cargar la imagen
-        if(!socioDev.getImagen().equals("")){
-            Picasso.with(getActivity().getApplicationContext()).load(socioDev.getImagen()).fit().transform(new ImagenCircular()).into(imgSocio);
+            //a partir del objeto Socio rellenado, rellenamos los TextViews
+            nombre.setText(socioDev.getNombre());
+            dni.setText(socioDev.getDni());
+            cuota.setText(socioDev.getQuota());
+            socio.setText(socioDev.getSocio());
+            direccion.setText(socioDev.getDireccion());
+            email.setText(socioDev.getEmail());
+            telefono.setText(socioDev.getTelefono());
+            poblacion.setText(socioDev.getPoblacion());
+
+            //comprobamos si esta vacío para cargar la imagen
+            if (!socioDev.getImagen().equals("")) {
+                Picasso.with(getActivity().getApplicationContext()).load(socioDev.getImagen()).fit().transform(new ImagenCircular()).into(imgSocio);
+            }
+
+            //añadimos la descripcion al toolbar
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(socioDev.getNombre());
+        } catch (Exception e) {
+
+            //mostramos un fragment en blanco
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.contenido, new BlankFragment()).commit();
+
+            //Escondemos el elemento de carga
+            esconderCarga();
+
+            //mostramos un mensaje de exito
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_consultar), Toast.LENGTH_LONG).show();
+
+
         }
-
 
     }
 
     //metodo que abre la camara de fotos para leer un codigo qr
+
     private void abrirCamaraQR() {
         IntentIntegrator.forSupportFragment(this)
                 .setBarcodeImageEnabled(true)

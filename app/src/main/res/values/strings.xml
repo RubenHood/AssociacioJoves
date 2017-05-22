@@ -14,6 +14,8 @@
     <string name="error_direccion">Debe escribir una dirección correcta.</string>
     <string name="error_poblacion">Debe escribir una población correcta.</string>
     <string name="error_telefono">Debe escribir un número de teléfono.</string>
+    <string name="error_consultar">El código QR no corresponde con ningún socio.</string>
+    <string name="error_consultar2">Debe escanear un código QR válido.</string>
     <string name="error_password">La contraseña debe tener entre 8 y 16 carácteres. Al menos un dígito, una minúscula y una mayúscula.</string>
     <string name="texto_boton_registro">REGISTRO</string>
     <string name="texto_boton_login">LOG IN</string>
@@ -35,6 +37,7 @@
     <string name="lbl_poblacion">Población:</string>
     <string name="lbl_socio">Nº socio:</string>
     <string name="lbl_telefono">Teléfono:</string>
+    <string name="texto_boton_reintentar">reintentar</string>
     <string name="lbl_dni">DNI:</string>
     <string name="menu_opcion_buscar">buscar</string>
     <string name="exito_actualizar">Ha actualizado correctamente a:\n</string>
@@ -46,5 +49,5 @@
     <string name="texto_camara">Cámara</string>
     <string name="texto_galeria">Galería y otras fuentes</string>
     <string name="texto_cancelar_qr">Has cancelado el escaneo del código.</string>
-    <string name="texto_camara_qr">Centre el Código</string>
+    <string name="texto_camara_qr">Centre el Código QR</string>
 </resources>

@@ -19,7 +19,7 @@ import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 
 /**
- * Created by Usuario on 08/05/2017.
+ * Created by Ruben on 08/05/2017.
  */
 
 public class NoticiasFragment extends Fragment{

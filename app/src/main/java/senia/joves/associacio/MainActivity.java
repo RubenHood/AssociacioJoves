@@ -6,12 +6,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-
-import senia.joves.associacio.fragments.EventosFragment;
+import senia.joves.associacio.fragments.EscanearFragment;
 import senia.joves.associacio.fragments.NoticiasFragment;
 import senia.joves.associacio.fragments.SociosFragment;
 
@@ -45,12 +42,12 @@ public class MainActivity extends AppCompatActivity {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                                             R.anim.enter_from_left, R.anim.exit_to_right)
-                                    .replace(R.id.contenido, new EventosFragment()).commit();
+                                    .replace(R.id.contenido, new EscanearFragment()).commit();
                         } else if (navigation.getSelectedItemId() == R.id.socios) {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
                                             R.anim.enter_from_right, R.anim.exit_to_left)
-                                    .replace(R.id.contenido, new EventosFragment()).commit();
+                                    .replace(R.id.contenido, new EscanearFragment()).commit();
                         }
                         return true;
                     case R.id.noticias:
