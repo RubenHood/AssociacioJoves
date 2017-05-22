@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import senia.joves.associacio.fragments.EventosFragment;
 import senia.joves.associacio.fragments.NoticiasFragment;
 import senia.joves.associacio.fragments.SociosFragment;
@@ -30,9 +32,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.socios:
-                        if (navigation.getSelectedItemId() == R.id.socios) {
-
-                        } else if (navigation.getSelectedItemId() == R.id.eventos || navigation.getSelectedItemId() == R.id.noticias) {
+                        if (navigation.getSelectedItemId() == R.id.eventos || navigation.getSelectedItemId() == R.id.noticias) {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                                             R.anim.enter_from_left, R.anim.exit_to_right)
@@ -41,9 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
                         return true;
                     case R.id.eventos:
-                        if (navigation.getSelectedItemId() == R.id.eventos) {
-
-                        } else if (navigation.getSelectedItemId() == R.id.noticias) {
+                        if (navigation.getSelectedItemId() == R.id.noticias) {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                                             R.anim.enter_from_left, R.anim.exit_to_right)
@@ -56,9 +54,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         return true;
                     case R.id.noticias:
-                        if (navigation.getSelectedItemId() == R.id.noticias) {
-
-                        } else if (navigation.getSelectedItemId() == R.id.socios || navigation.getSelectedItemId() == R.id.eventos) {
+                        if (navigation.getSelectedItemId() == R.id.socios || navigation.getSelectedItemId() == R.id.eventos) {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
                                             R.anim.enter_from_right, R.anim.exit_to_left)

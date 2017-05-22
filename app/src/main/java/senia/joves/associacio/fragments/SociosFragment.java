@@ -45,8 +45,6 @@ import static senia.joves.associacio.Static.Recursos.ARRAY_RECIBIDO;
 
 public class SociosFragment extends Fragment {
 
-    //Datos compartidos
-
     //variable para el progress dialog
     private ProgressDialog mProgressDialog;
 

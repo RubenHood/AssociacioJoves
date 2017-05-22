@@ -14,9 +14,53 @@
         app:popupTheme="@style/AppTheme.AppBarOverlay"
         app:theme="@style/AppTheme.AppBarOverlay" />
 
-    <ListView
-        android:id="@+id/noticias"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:entries="@array/noticias"/>
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/cartell_seniafestultim"
+                />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/senia_sound"
+                android:layout_below="@+id/imageView1"/>
+
+            <ImageView
+                android:id="@+id/imageVie32"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/imagen1"
+                android:layout_below="@+id/imageView2"/>
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/imagen2"
+                android:layout_below="@+id/imageVie32"/>
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/cartell_passabars"
+                android:layout_below="@+id/imageView4"/>
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+
 </LinearLayout>

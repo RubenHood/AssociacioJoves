@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapRegionDecoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,17 +37,24 @@ import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.regex.Pattern;
 
 import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 
+import static android.app.Activity.RESULT_OK;
 import static com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE;
 import static com.theartofdev.edmodo.cropper.CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE;
+import static com.theartofdev.edmodo.cropper.CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE;
+import static com.theartofdev.edmodo.cropper.CropImage.getActivityResult;
 import static com.theartofdev.edmodo.cropper.CropImage.getPickImageChooserIntent;
 import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
+import static senia.joves.associacio.Static.Recursos.SELECT_FILE;
 
 /**
  * Created by Ruben on 08/05/2017.
@@ -53,8 +62,14 @@ import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
 
 public class NewUserFragment extends Fragment {
 
+    //variables para cargar las imagenes
     Uri mCropImageUri;
-    //variable para almacenar el nombre del archivo
+
+    //variable que guarda la imagen seleccionada en bitmap
+    Bitmap imgBitmap;
+
+    //variable que guarda la imagen seleccionada en URI
+    Uri imgURI;
 
 
     //referencias a componentes de la vista
@@ -67,7 +82,7 @@ public class NewUserFragment extends Fragment {
     private Switch swSwitch;
     private FloatingActionButton fab;
     private FloatingActionButton fabImagenes;
-    private ImageView imgPerfil;
+    private CropImageView imgPerfil;
 
     //referencia a la bd
     DatabaseReference ref;
@@ -136,7 +151,7 @@ public class NewUserFragment extends Fragment {
         txfPoblacion = (EditText) getActivity().findViewById(R.id.txfPoblacion);
         txfTelefono = (EditText) getActivity().findViewById(R.id.txfTelefono);
         swSwitch = (Switch) getActivity().findViewById(R.id.swPagado);
-        imgPerfil = (ImageView) getActivity().findViewById(R.id.imgNuevoSocio);
+        imgPerfil = (CropImageView) getActivity().findViewById(R.id.imgNuevoSocio);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fabImagenes = (FloatingActionButton) getActivity().findViewById(R.id.fabFoto);
 
@@ -304,8 +319,9 @@ public class NewUserFragment extends Fragment {
 
     //metodo que abre la actividad para cortar la imagen
     private void startCropImageActivity(Uri imageUri) {
-        CropImage.activity(imageUri)
-                .start(getContext(), this);
+        Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).setActivityTitle("Recorte su imagen").setNoOutputImage(true)
+                .getIntent(getContext());
+        startActivityForResult(intent, CROP_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
     //metodo que se ejecuta al cerrarse el dialogo de los permisos
@@ -336,23 +352,32 @@ public class NewUserFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         // comprobamos si tenemos permisoss y vamos a cortar la imagen
-        if (requestCode == PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == RESULT_OK) {
             Uri imageUri = CropImage.getPickImageResultUri(getActivity(), data);
 
-          // For API >= 23 necesitamos los permisos
-           if (CropImage.isReadExternalStoragePermissionsRequired(getActivity(), imageUri)) {
+            // For API >= 23 necesitamos los permisos
+            if (CropImage.isReadExternalStoragePermissionsRequired(getActivity(), imageUri)) {
                 // request permissions and handle the result in onRequestPermissionsResult()
                 mCropImageUri = imageUri;
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
             } else {
-            // si no requerimos permisos
-            startCropImageActivity(imageUri);
+                // si no requerimos permisos
+                startCropImageActivity(imageUri);
             }
         }
 
-        //comprobamos si venimos de cortar la imagen, entonces la mostramos al usuario, la subimos a Firebase
-        if(requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+        Uri resultUri = null;
 
+        //comprobamos si venimos de cortar la imagen, entonces la mostramos al usuario, la subimos a Firebase
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                resultUri = result.getUri();
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+            
+            imgPerfil.setImageUriAsync(resultUri);
         }
     }
 

@@ -8,8 +8,8 @@
 
     <item
         android:id="@+id/eventos"
-        android:icon="@drawable/ic_eventos"
-        android:title="@string/titulo_eventos" />
+        android:icon="@drawable/ic_comprobar"
+        android:title="@string/titulo_comprobar" />
 
     <item
         android:id="@+id/socios"

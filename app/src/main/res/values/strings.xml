@@ -25,7 +25,7 @@
     <string name="titulo_login_fragment">Log in</string>
     <string name="title_activity_tabbed">tabbedActivity</string>
     <string name="titulo_socios">Socios</string>
-    <string name="titulo_eventos">Eventos</string>
+    <string name="titulo_comprobar">Escanear</string>
     <string name="titulo_noticias">Noticias</string>
     <string name="titulo_nuevo">Nuevo Socio</string>
     <string name="lbl_spinner">Quota socio:</string>
@@ -45,20 +45,6 @@
     <string name="titulo_dialogo">Añadir imagen personalizada desde</string>
     <string name="texto_camara">Cámara</string>
     <string name="texto_galeria">Galería y otras fuentes</string>
-    <string-array name="prueba">
-        <item>dato</item>
-        <item>dato</item>
-        <item>dato</item>
-        <item>dato</item>
-        <item>dato</item>
-        <item>dato</item>
-    </string-array>
-    <string-array name="noticias">
-        <item>apuntate a la asosiacion</item>
-        <item>todos somos</item>
-        <item>Paga</item>
-        <item>Descomptes</item>
-        <item>Vale</item>
-        <item>Akell es tio</item>
-    </string-array>
+    <string name="texto_cancelar_qr">Has cancelado el escaneo del código.</string>
+    <string name="texto_camara_qr">Centre el Código</string>
 </resources>
