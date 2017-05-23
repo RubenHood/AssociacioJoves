@@ -34,12 +34,15 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import java.util.regex.Pattern;
 
 import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
+import senia.joves.associacio.librerias.ImagenCircular;
 
 /**
  * Created by Ruben on 08/05/2017.
@@ -57,6 +60,7 @@ public class DetalleFragment extends Fragment {
     private EditText txfSocio;
     private Switch swSwitch;
     private FloatingActionButton fab;
+    private ImageView imgPerfil;
 
     //referencia a la bd
     DatabaseReference ref;
@@ -163,6 +167,7 @@ public class DetalleFragment extends Fragment {
         txfSocio = (EditText) getActivity().findViewById(R.id.txfsocio_d);
         swSwitch = (Switch) getActivity().findViewById(R.id.swPagado_d);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_d);
+        imgPerfil = (ImageView) getActivity().findViewById(R.id.fabFotoPerfil);
 
         //modificamos el tamaño del switch
         swSwitch.setSwitchMinWidth(200);
@@ -182,6 +187,12 @@ public class DetalleFragment extends Fragment {
             swSwitch.setChecked(true);
         } else {
             swSwitch.setChecked(false);
+        }
+
+        if(!socio.getImagen().equals("")){
+            Picasso.with(getActivity()).load(socio.getImagen()).transform(new ImagenCircular()).into(imgPerfil);
+        }else {
+            Picasso.with(getActivity()).load(R.drawable.no_perfil).transform(new ImagenCircular()).into(imgPerfil);
         }
 
         //listener para cuando clicamos en el boton flotante

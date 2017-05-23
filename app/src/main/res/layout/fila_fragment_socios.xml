@@ -11,13 +11,24 @@
         android:layout_height="70dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        app:cardBackgroundColor="@color/cardview_dark_background"
+        android:theme="@style/Base.CardView"
         app:cardElevation="3dp"
         app:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/fondo_fila" />
 
             <ImageView
                 android:id="@+id/icono"
@@ -39,8 +50,7 @@
                 android:layout_marginStart="26dp"
                 android:layout_toEndOf="@+id/icono"
                 android:layout_toRightOf="@+id/icono"
-                android:fontFamily="sans-serif-smallcaps"
-                android:textColor="@android:color/white" />
+                android:fontFamily="sans-serif-smallcaps" />
 
             <ImageView
                 android:id="@+id/pagado"

@@ -5,24 +5,20 @@ package senia.joves.associacio.adaptadores;
  */
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.Locale;
 
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Noticia;
-import senia.joves.associacio.entidades.Socio;
-import senia.joves.associacio.librerias.ImagenCircular;
 
-import static senia.joves.associacio.Static.Recursos.LISTA_NOTICIAS;
+import static senia.joves.associacio.Static.Recursos.LISTA_URL_IMAGENES;
 
 //array que recibimos desde Sociosfragment
 
@@ -36,12 +32,12 @@ public class AdaptadorNoticias extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return LISTA_NOTICIAS.size();
+        return LISTA_URL_IMAGENES.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return LISTA_NOTICIAS.get(position);
+        return LISTA_URL_IMAGENES.get(position);
     }
 
     @Override
@@ -65,10 +61,12 @@ public class AdaptadorNoticias extends BaseAdapter {
         ImageView img = (ImageView) rowView.findViewById(R.id.img_noticias);
 
         //obtenemos el objeto de la tabla a partir de la lista
-        Noticia item = LISTA_NOTICIAS.get(position);
+        Noticia item = LISTA_URL_IMAGENES.get(position);
+
+        Log.e("imagen en adaptador: " , item.getNombre());
 
         //comprobamos si tiene foto de perfil para ponerla o para no ponerla
-        Picasso.with(context).load(item.getNombre()).error(R.drawable.seniafest).into(img);
+        Picasso.with(context).load(item.getNombre()).fit().into(img);
 
 
         return rowView;

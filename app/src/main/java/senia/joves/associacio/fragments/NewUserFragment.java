@@ -321,7 +321,7 @@ public class NewUserFragment extends Fragment {
     private void startCropImageActivity(Uri imageUri) {
         Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).setActivityTitle("Recorte su imagen").setNoOutputImage(true)
                 .getIntent(getContext());
-        startActivityForResult(intent, CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+        this.startActivityForResult(intent, CROP_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
     //metodo que se ejecuta al cerrarse el dialogo de los permisos
@@ -371,12 +371,10 @@ public class NewUserFragment extends Fragment {
         //comprobamos si venimos de cortar la imagen, entonces la mostramos al usuario, la subimos a Firebase
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                resultUri = result.getUri();
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-            
+
+            resultUri = result.getUri();
+
+
             imgPerfil.setImageUriAsync(resultUri);
         }
     }

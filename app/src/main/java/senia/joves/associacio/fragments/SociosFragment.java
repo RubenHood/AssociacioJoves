@@ -1,7 +1,11 @@
 package senia.joves.associacio.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
@@ -138,24 +143,34 @@ public class SociosFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //mostramos un barra de progreso
-        mostrarCarga();
+        //comprobamos si hay internet o no
+        if (isNetDisponible() && isOnlineNet()) {
+            //mostramos un barra de progreso
+            mostrarCarga();
 
-        // Leemos de la RealTime Database Firebase
-        consultaSocios();
+            // Leemos de la RealTime Database Firebase
+            consultaSocios();
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.anadirSocio);
+            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.anadirSocio);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                                R.anim.enter_from_left, R.anim.exit_to_right)
-                        .replace(R.id.contenido, new NewUserFragment())
-                        .addToBackStack("nuevoSocioFragment").commit();
-            }
-        });
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                                    R.anim.enter_from_left, R.anim.exit_to_right)
+                            .replace(R.id.contenido, new NewUserFragment())
+                            .addToBackStack("nuevoSocioFragment").commit();
+                }
+            });
+        }else {
+            getFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                            R.anim.enter_from_left, R.anim.exit_to_right)
+                    .replace(R.id.contenido, new SinConexionFragment()).commit();
+        }
+
+
 
 
     }
@@ -261,6 +276,29 @@ public class SociosFragment extends Fragment {
         });
     }
 
+    private boolean isNetDisponible() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
+    }
+
+    public Boolean isOnlineNet() {
+
+        try {
+            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
+
+            int val = p.waitFor();
+            boolean reachable = (val == 0);
+            return reachable;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     //metodo que muestra un dialogo de carga
     private void mostrarCarga() {

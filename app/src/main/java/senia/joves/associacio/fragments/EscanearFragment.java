@@ -148,7 +148,7 @@ public class EscanearFragment extends Fragment {
 
                 //mostramos un fragment en blanco
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.contenido, new BlankFragment()).commit();
+                        .replace(R.id.contenido, new ErrorQRFragment()).commit();
             } else {
                 //Recogemos el resultado y lo mostramos en pantalla
                 //mostramos un barra de progreso
@@ -233,7 +233,7 @@ public class EscanearFragment extends Fragment {
 
             //mostramos un fragment en blanco
             getFragmentManager().beginTransaction()
-                    .replace(R.id.contenido, new BlankFragment()).commit();
+                    .replace(R.id.contenido, new ErrorQRFragment()).commit();
 
             //Escondemos el elemento de carga
             esconderCarga();

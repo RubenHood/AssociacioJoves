@@ -14,11 +14,11 @@ import senia.joves.associacio.R;
  * Created by Usuario on 22/05/2017.
  */
 
-public class BlankFragment extends Fragment {
+public class ErrorQRFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_blanco, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_errorqr, container, false);
 
         return rootView;
 

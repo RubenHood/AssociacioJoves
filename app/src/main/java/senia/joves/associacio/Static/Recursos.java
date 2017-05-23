@@ -27,7 +27,12 @@ public final class Recursos {
     //constante para darle nombre a la operacion de abrir archivo
     public static final int SELECT_FILE = 1;
 
-    //array para los objetos de la lista de noticias
-    public static final ArrayList<Noticia> LISTA_NOTICIAS = new ArrayList<>();
+    //array para los nombres de las imagenes
+    public static final ArrayList<Noticia> LISTA_NOMBRE_IMAGENES = new ArrayList<>();
+
+    //array donde guardo las urls de cada imagen
+    public static ArrayList<Noticia> LISTA_URL_IMAGENES = null;
+
+
 
 }
