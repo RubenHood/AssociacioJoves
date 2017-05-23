@@ -36,6 +36,7 @@ import senia.joves.associacio.MainActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.adaptadores.AdaptadorSocios;
 import senia.joves.associacio.entidades.Socio;
+import senia.joves.associacio.fragments.error.SinConexionFragment;
 
 import static senia.joves.associacio.Static.Recursos.LISTA_SOCIOS;
 import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
@@ -102,6 +103,9 @@ public class SociosFragment extends Fragment {
                 //deslogueamos al usuario
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getContext(), LoginActivity.class));
+                break;
+            case R.id.acercaDe:
+                new AcercaDeFragment().show(getFragmentManager(), "AcercaDe");
                 break;
         }
 

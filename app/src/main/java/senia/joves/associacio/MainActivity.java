@@ -70,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+        //comprobamos si hay algun fragment cargado en el BackStack
         if(getSupportFragmentManager().getBackStackEntryCount() > 0){
             for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++){
                 getSupportFragmentManager().popBackStack();
             }
-
         }else {
             new AlertDialog.Builder(this)
                     .setIcon(R.drawable.salir)

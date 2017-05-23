@@ -32,11 +32,18 @@
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_gravity="bottom|right"
-                android:layout_margin="@dimen/fab_margin"
+                android:layout_margin="5dp"
                 android:clickable="true"
                 app:layout_anchor="@id/app_bar"
                 app:srcCompat="@drawable/no_perfil" />
 
+            <ImageView
+                android:id="@+id/btnEditar"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="60dp"
+                app:srcCompat="@drawable/editar" />
 
 
             <android.support.v7.widget.Toolbar

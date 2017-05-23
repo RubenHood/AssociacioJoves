@@ -1,11 +1,50 @@
 <resources>
     <string name="app_name">Joves Seniencs</string>
+
+    <!--TEXTOS-->
+    <string name="texto_añadir">Se va a proceder a insertar los datos. Desea continuar?</string>
+    <string name="texto_actualizar">Se va a proceder a actualizar los datos. Está seguro que desea actualizar el socio?</string>
     <string name="texto_back">Desea salir?</string>
+    <string name="texto_boton_registro">REGISTRO</string>
+    <string name="texto_boton_login">LOG IN</string>
+    <string name="texto_boton_reintentar">reintentar</string>
+    <string name="texto_cancelar_qr">Has cancelado el escaneo del código.</string>
+    <string name="texto_camara_qr">Centre el Código QR</string>
+    <string name="texto_logout">Log out</string>
+    <string name="texto_cargando">Cargando…</string>
+    <string name="texto_btn_añadir">Añadir</string>
+    <string name="texto_btn_acercade">Acerca de...</string>
+    <string name="texto_acercade">Esta aplicación ha sido creada por el desarrollador Rubén Vargas Guzman.
+                                  Todo el material usado es de distribución libre o ha sido creado para su uso en esta App.
+                                  Puedes seguir todos los trabajos de Rubén Vargas, clicando abajo, en su perfil de GitHub. </string>
+
+    <!--TITULOS-->
+    <string name="titulo_main_fragment">Associación Jóvenes Seniencs</string>
+    <string name="titulo_login_fragment">Log in</string>
+    <string name="titulo_socios">Socios</string>
+    <string name="titulo_comprobar">Escanear</string>
+    <string name="titulo_noticias">Noticias</string>
+    <string name="titulo_nuevo">Nuevo Socio</string>
     <string name="titulo_back">Salir</string>
     <string name="titulo_actualizar">Actualizar Socio</string>
     <string name="titulo_añadir">Insertar Socio</string>
-    <string name="texto_añadir">Se va a proceder a insertar los datos. Desea continuar?</string>
-    <string name="texto_actualizar">Se va a proceder a actualizar los datos. Está seguro que desea actualizar el socio?</string>
+    <string name="titulo_dialogo">Añadir imagen desde</string>
+    <string name="titulo_acercade">Acerca de</string>
+
+    <!--LABELS-->
+    <string name="lbl_spinner">Quota socio:</string>
+    <string name="lbl_nombre">Nombre:</string>
+    <string name="lbl_direccion">Dirección:</string>
+    <string name="lbl_email">Email:</string>
+    <string name="lbl_poblacion">Población:</string>
+    <string name="lbl_socio">Nº socio:</string>
+    <string name="lbl_telefono">Teléfono:</string>
+    <string name="lbl_dni">DNI:</string>
+    <string name="lbl_pagado">Cuota</string>
+    <string name="lbl_email_login">Email</string>
+    <string name="lbl_contrasena_login">Contraseña</string>
+
+    <!--Errores -->
     <string name="error_no_internet">No hay conexión a internet, reintentando en 10 segundos.....</string>
     <string name="error_no_login">Email o contraseña erróneos…</string>
     <string name="error_email">Debe escribir un email correcto.</string>
@@ -17,35 +56,17 @@
     <string name="error_consultar">El código QR no corresponde con ningún socio.</string>
     <string name="error_consultar2">Debe escanear un código QR válido.</string>
     <string name="error_password">La contraseña debe tener entre 8 y 16 carácteres. Al menos un dígito, una minúscula y una mayúscula.</string>
-    <string name="texto_boton_registro">REGISTRO</string>
-    <string name="texto_boton_login">LOG IN</string>
-    <string name="txf_email">Email</string>
-    <string name="txf_contrasena">Contraseña</string>
-    <string name="texto_logout">Log out</string>
-    <string name="texto_cargando">Cargando…</string>
-    <string name="titulo_main_fragment">Associación Jóvenes Seniencs</string>
-    <string name="titulo_login_fragment">Log in</string>
-    <string name="title_activity_tabbed">tabbedActivity</string>
-    <string name="titulo_socios">Socios</string>
-    <string name="titulo_comprobar">Escanear</string>
-    <string name="titulo_noticias">Noticias</string>
-    <string name="titulo_nuevo">Nuevo Socio</string>
-    <string name="lbl_spinner">Quota socio:</string>
-    <string name="lbl_nombre">Nombre:</string>
-    <string name="lbl_direccion">Dirección:</string>
-    <string name="lbl_email">Email:</string>
-    <string name="lbl_poblacion">Población:</string>
-    <string name="lbl_socio">Nº socio:</string>
-    <string name="lbl_telefono">Teléfono:</string>
-    <string name="texto_boton_reintentar">reintentar</string>
-    <string name="lbl_dni">DNI:</string>
-    <string name="menu_opcion_buscar">buscar</string>
-    <string name="exito_actualizar">Ha actualizado correctamente a:\n</string>
-    <string name="exito_añadir">Ha añadido correctamente a:\n</string>
     <string name="error_actualizar">Ha ocurrido un error al actualizar los datos.</string>
     <string name="error_añadir">Ha ocurrido un error al insertar datos.</string>
-    <string name="lbl_pagado">Cuota</string>
-    <string name="titulo_dialogo">Añadir imagen desde</string>
-    <string name="texto_cancelar_qr">Has cancelado el escaneo del código.</string>
-    <string name="texto_camara_qr">Centre el Código QR</string>
+    <string name="error_onclick">Mantenga pulsada la imagen para editarla.</string>
+
+    <!--EXITOS-->
+    <string name="exito_actualizar">Ha actualizado correctamente a:\n</string>
+    <string name="exito_añadir">Ha añadido correctamente a:\n</string>
+
+    <string name="menu_opcion_buscar">buscar</string>
+    <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>
+    <string name="texto_linkedin"><a href="https://www.linkedin.com/in/rub%C3%A9n-vargas-guzman-660b418a/">LinkedIn</a></string>
+
+
 </resources>

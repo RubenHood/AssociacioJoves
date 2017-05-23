@@ -1,13 +1,14 @@
 package senia.joves.associacio.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -25,17 +26,25 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
+import com.vansuita.pickimage.bean.PickResult;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.util.regex.Pattern;
 
@@ -49,6 +58,15 @@ import senia.joves.associacio.librerias.ImagenCircular;
  */
 
 public class DetalleFragment extends Fragment {
+
+    //variables para cargar las imagenes
+    Uri imgSeleccionada = null;
+
+    //referencia al modulo de Storage de Firebase
+    StorageReference storageRef;
+
+    //variable para el progress dialog
+    private ProgressDialog mProgressDialog;
 
     //referencias a componentes de la vista
     private EditText txfNombre;
@@ -69,9 +87,7 @@ public class DetalleFragment extends Fragment {
     private Socio socio;
 
     //variable para la imagen del toolbar
-    ImageView img_perfil;
-
-    AppBarLayout appBarLayout;
+    ImageView qr_code;
 
     //constructor vacio necesario
     public DetalleFragment() {
@@ -96,6 +112,9 @@ public class DetalleFragment extends Fragment {
                 break;
             case android.R.id.home:
                 getFragmentManager().popBackStack();
+                break;
+            case R.id.acercaDe:
+                new AcercaDeFragment().show(getFragmentManager(), "AcercaDe");
                 break;
         }
 
@@ -125,22 +144,17 @@ public class DetalleFragment extends Fragment {
             ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         }
 
-        //saber si el appbar layout esta colapsado o no
-        appBarLayout = (AppBarLayout) rootView.findViewById(R.id.app_bar);
-        final CollapsingToolbarLayout c = (CollapsingToolbarLayout) rootView.findViewById(R.id.toolbar_layout);
-
         //cambiamos la foto del toolbar
-        img_perfil = (ImageView) rootView.findViewById(R.id.imageTitulo);
+        qr_code = (ImageView) rootView.findViewById(R.id.imageTitulo);
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
-        try{
-            BitMatrix bitMatrix = multiFormatWriter.encode(socio.getNombre(), BarcodeFormat.QR_CODE, 400,400);
+        try {
+            BitMatrix bitMatrix = multiFormatWriter.encode(socio.getNombre(), BarcodeFormat.QR_CODE, 400, 400);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-            img_perfil.setImageBitmap(bitmap);
-        }
-        catch (WriterException e){
+            qr_code.setImageBitmap(bitmap);
+        } catch (WriterException e) {
             e.printStackTrace();
         }
 
@@ -189,14 +203,24 @@ public class DetalleFragment extends Fragment {
             swSwitch.setChecked(false);
         }
 
-        if(!socio.getImagen().equals("")){
+        if (!socio.getImagen().equals("")) {
             Picasso.with(getActivity()).load(socio.getImagen()).transform(new ImagenCircular()).into(imgPerfil);
-        }else {
+        } else {
             Picasso.with(getActivity()).load(R.drawable.no_perfil).transform(new ImagenCircular()).into(imgPerfil);
         }
 
         //listener para cuando clicamos en el boton flotante
-        //añadimos un socio nuevo en firebase
+        //comprobamos las validaciones e insertamos un socio en firebase Database
+        onClickFab();
+
+        //listener para cuando hacemos un longClick en la imagen de perfil
+        //comprobamos las validaciones e insertamos un socio en firebase Database
+        onListenersImagePerfil();
+
+    }
+
+    //listener del boton flotante de actualizar socio
+    private void onClickFab() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,32 +262,95 @@ public class DetalleFragment extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
-                                        Socio s = new Socio();
+                                        //mostramos un dialogo de carga
+                                        mostrarCarga();
 
-                                        //creamos un socio a partir de los datos
-                                        s.setImagen(socio.getImagen());
-                                        s.setDireccion(direccion);
-                                        s.setDni(dni);
-                                        s.setEmail(email);
-                                        s.setNombre(nombre);
-                                        s.setQuota(quota);
-                                        s.setTelefono(telefono);
-                                        s.setPoblacion(poblacion);
-                                        s.setSocio(socio.getSocio());
+                                        //comprobamos si hemos elegido una imagen de perfil, para actualizarla o no
+                                        if (imgSeleccionada == null) {
+                                            Socio s = new Socio();
+
+                                            //creamos un socio a partir de los datos
+                                            s.setImagen(socio.getImagen());
+                                            s.setDireccion(direccion);
+                                            s.setDni(dni);
+                                            s.setEmail(email);
+                                            s.setNombre(nombre);
+                                            s.setQuota(quota);
+                                            s.setTelefono(telefono);
+                                            s.setPoblacion(poblacion);
+                                            s.setSocio(socio.getSocio());
 
 
+                                            //añadimos un nuevo usuario
+                                            ref.child(socio.getNombre()).setValue(s);
 
-                                        //añadimos un nuevo usuario
-                                        ref.child(socio.getNombre()).setValue(s);
+                                            //escondemos el dialogo de carga
+                                            esconderCarga();
 
-                                        //mostramos un mensaje de exito
-                                        Toast.makeText(getActivity(), getResources().getString(R.string.exito_actualizar) + nombre, Toast.LENGTH_LONG).show();
+                                            //mostramos un mensaje de exito
+                                            Toast.makeText(getActivity(), getResources().getString(R.string.exito_actualizar) + nombre, Toast.LENGTH_LONG).show();
 
-                                        //salimos del actual fragment
-                                        getFragmentManager().beginTransaction()
-                                                .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
-                                                        R.anim.enter_from_right, R.anim.exit_to_left)
-                                                .replace(R.id.contenido, new SociosFragment()).commit();
+                                            //salimos del actual fragment
+                                            getFragmentManager().beginTransaction()
+                                                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
+                                                            R.anim.enter_from_right, R.anim.exit_to_left)
+                                                    .replace(R.id.contenido, new SociosFragment()).commit();
+                                        } else {
+                                            //referencia al almacenamiento de imagenes de perfil
+                                            storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://associaciojoves-70d35.appspot.com/socio_perfil/" + nombre + ".png");
+
+                                            //si hemos elegido imagen la subimos al Storage
+                                            storageRef.putFile(imgSeleccionada)
+                                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                            //una vez subida, obtenemos la url para añadirla al objeto socio
+                                                            @SuppressWarnings("VisibleForTests")
+                                                            String downloadUrl = taskSnapshot.getDownloadUrl().toString();
+
+                                                            //pasamos los datos al objeto socio e insertamos en Realtime DB
+                                                            Socio s = new Socio();
+
+                                                            //creamos un socio a partir de los datos
+                                                            s.setImagen(downloadUrl);
+                                                            s.setDireccion(direccion);
+                                                            s.setDni(dni);
+                                                            s.setEmail(email);
+                                                            s.setNombre(nombre);
+                                                            s.setQuota(quota);
+                                                            s.setTelefono(telefono);
+                                                            s.setPoblacion(poblacion);
+                                                            s.setSocio(socio.getSocio());
+
+                                                            //añadimos un nuevo usuario
+                                                            ref.child(socio.getNombre()).setValue(s);
+
+                                                            //escondemos el dialogo de carga
+                                                            esconderCarga();
+
+                                                            //mostramos un mensaje de éxito
+                                                            Toast.makeText(getActivity(), getResources().getString(R.string.exito_actualizar) + nombre, Toast.LENGTH_LONG).show();
+
+                                                            //salimos del actual fragment
+                                                            getFragmentManager().beginTransaction()
+                                                                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
+                                                                            R.anim.enter_from_right, R.anim.exit_to_left)
+                                                                    .replace(R.id.contenido, new SociosFragment()).commit();
+
+
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception exception) {
+                                                            FirebaseCrash.log("Error al subir la imagen: " + exception.toString());
+                                                            Toast.makeText(getActivity(), getResources().getString(R.string.error_añadir), Toast.LENGTH_LONG).show();
+
+                                                        }
+                                                    });
+
+                                        }
+
                                     }
                                 })
                                 .show();
@@ -275,10 +362,73 @@ public class DetalleFragment extends Fragment {
                 }
             }
         });
+    }
+
+    //listener al boton
+    private void onListenersImagePerfil() {
+
+        //onclick
+        imgPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_onclick), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        imgPerfil.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                //abrimos un dialogo para elegir imagen de la galeria
+                abrirDialogoImagen();
+                return false;
+            }
+        });
+    }
+
+    //metodo que abre un dialogo para abrir una imagen de la galeria o camara, y la almacena e inserta en in imageview
+    private void abrirDialogoImagen() {
+
+        //seteamos la ventana para elegir camara o galeria
+        PickSetup setup = new PickSetup();
+        setup.setTitle(getActivity().getResources().getString(R.string.titulo_dialogo));
+        setup.setProgressText(getActivity().getResources().getString(R.string.texto_cargando));
+        setup.setProgressTextColor(getActivity().getResources().getColor(R.color.colorAccent));
+        setup.setSystemDialog(true);
+
+        PickImageDialog.build(setup)
+                .setOnPickResult(new IPickResult() {
+                    @Override
+                    public void onPickResult(PickResult r) {
+
+                        //almacenamos la imagen seleccionada
+                        imgSeleccionada = r.getUri();
+
+                        //seteamos la imagen en la cabececera
+                        Picasso.with(getActivity()).load(r.getUri()).transform(new ImagenCircular()).into(imgPerfil);
+                    }
+                }).show(getFragmentManager());
+
+    }
 
 
+    //metodo que muestra un dialogo de carga
+    private void mostrarCarga() {
 
+        //creamos una barra de carga
+        mProgressDialog = new ProgressDialog(getActivity());
 
+        //mostramos un dialogo
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getResources().getString(R.string.texto_cargando));
+        mProgressDialog.show();
+    }
+
+    private void esconderCarga() {
+        //escondemos el progres dialog
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
     @Override
@@ -288,6 +438,7 @@ public class DetalleFragment extends Fragment {
         super.onDestroy();
     }
 
+    //validaciones
     private boolean validar(String nombre, String dni, String email, String direccion, String poblacion, String telefono) {
         if (!validarVacio(nombre)) {
             txfNombre.requestFocus();

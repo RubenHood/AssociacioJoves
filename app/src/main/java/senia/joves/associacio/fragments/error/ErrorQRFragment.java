@@ -1,4 +1,4 @@
-package senia.joves.associacio.fragments;
+package senia.joves.associacio.fragments.error;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import senia.joves.associacio.R;
+import senia.joves.associacio.fragments.EscanearFragment;
 
 /**
  * Created by Usuario on 22/05/2017.

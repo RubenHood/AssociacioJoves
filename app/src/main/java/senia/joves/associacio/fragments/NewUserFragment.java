@@ -101,6 +101,9 @@ public class NewUserFragment extends Fragment {
             case android.R.id.home:
                 getFragmentManager().popBackStack();
                 break;
+            case R.id.acercaDe:
+                new AcercaDeFragment().show(getFragmentManager(), "AcercaDe");
+                break;
         }
 
         return super.onOptionsItemSelected(item);

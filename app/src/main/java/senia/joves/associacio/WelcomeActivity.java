@@ -49,20 +49,22 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         };
 
+        //comprobamos si hay internet, para lanzar la aplicación o no.
         if (isNetDisponible() && isOnlineNet()) {
-            // simular un tiempo
+            // tiempo que se mostrará el logo en pantalla, si hay internet
             Timer timer = new Timer();
-            timer.schedule(task, 500);
+            timer.schedule(task, 3000);
         } else {
             Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.error_no_internet), Snackbar.LENGTH_INDEFINITE).show();
 
-            // simular un tiempo
+            // Tiempo que tardará en reiniciar la aplicación
             Timer timer = new Timer();
             timer.schedule(task2, 10000);
         }
 
     }
 
+    //metodo que comprueba si estamos conectado a alguna red.
     private boolean isNetDisponible() {
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -72,6 +74,7 @@ public class WelcomeActivity extends AppCompatActivity {
         return (actNetInfo != null && actNetInfo.isConnected());
     }
 
+    //metodo que hace un ping a google
     public Boolean isOnlineNet() {
 
         try {
@@ -103,11 +106,7 @@ public class WelcomeActivity extends AppCompatActivity {
     @TargetApi(19)
     private void hideVirtualButtons() {
         getWindow().getDecorView().setSystemUiVisibility(
-//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//                        | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 }

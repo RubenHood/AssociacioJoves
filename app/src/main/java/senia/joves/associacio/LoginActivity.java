@@ -55,19 +55,17 @@ public class LoginActivity extends AppCompatActivity {
         añadirListeners();
     }
 
-    //al empezar la actividad, comprobamos si el usuario esta logueado, para cargar o no el login
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // Si getCurrentUser no es null, avanzamos al siguiente activity
-        if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
-    }
-
     private void añadirListeners() {
 
+        //añadimos el listener al boton de login
+        onClickLogin();
+
+        //añadimos el listener al boton de registro
+        onClickRegistro();
+    }
+
+    //listener boton login
+    private void onClickLogin(){
         //listener boton login
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +113,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //Listener boton registro
+
+    }
+
+    //listener del boton de registro
+    private void onClickRegistro(){
         btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +166,18 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //al empezar la actividad, comprobamos si el usuario esta logueado, para cargar o no el login
+    @Override
+    public void onStart() {
+        super.onStart();
 
+        // Si getCurrentUser no es null, avanzamos al siguiente activity
+        if (mAuth.getCurrentUser() != null) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
+    }
+
+    //validaciones
     private boolean validarPassword(String pass) {
         Pattern patron = Pattern.compile("^(?=.*\\d)(?=.*[\\u0021-\\u002b\\u003c-\\u0040])(?=.*[A-Z])(?=.*[a-z])\\S{8,16}$");
 

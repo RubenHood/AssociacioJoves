@@ -31,6 +31,7 @@ import com.squareup.picasso.Picasso;
 import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
+import senia.joves.associacio.fragments.error.ErrorQRFragment;
 import senia.joves.associacio.librerias.ImagenCircular;
 
 /**
@@ -75,12 +76,10 @@ public class EscanearFragment extends Fragment {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getContext(), LoginActivity.class));
                 break;
-            case R.id.reintentar:
-                //recargamos la pagina
-                //mostramos un fragment en blanco
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.contenido, new EscanearFragment()).commit();
+            case R.id.acercaDe:
+                new AcercaDeFragment().show(getFragmentManager(), "AcercaDe");
                 break;
+
         }
 
         return super.onOptionsItemSelected(item);

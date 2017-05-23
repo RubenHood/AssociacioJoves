@@ -1,4 +1,4 @@
-package senia.joves.associacio.fragments;
+package senia.joves.associacio.fragments.error;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

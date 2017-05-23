@@ -32,6 +32,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+import com.vansuita.pickimage.bean.PickResult;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.listeners.IPickResult;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +45,7 @@ import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.adaptadores.AdaptadorNoticias;
 import senia.joves.associacio.entidades.Noticia;
+import senia.joves.associacio.librerias.ImagenCircular;
 
 import static senia.joves.associacio.Static.Recursos.LISTA_NOMBRE_IMAGENES;
 import static senia.joves.associacio.Static.Recursos.LISTA_URL_IMAGENES;
@@ -72,7 +78,7 @@ public class NoticiasFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_principal, menu);
+        inflater.inflate(R.menu.menu_noticias, menu);
     }
 
     @Override
@@ -83,6 +89,12 @@ public class NoticiasFragment extends Fragment {
                 //deslogueamos al usuario
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getContext(), LoginActivity.class));
+                break;
+            case R.id.acercaDe:
+                new AcercaDeFragment().show(getFragmentManager(), "AcercaDe");
+                break;
+            case R.id.anyadir:
+                abrirDialogoImagen();
                 break;
         }
 
@@ -223,6 +235,31 @@ public class NoticiasFragment extends Fragment {
 
         //pasamos el adapter a la lista
         lstLista.setAdapter(ad);
+
+    }
+
+    //metodo que abre un dialogo para abrir una imagen de la galeria o camara, y la almacena e inserta en in imageview
+    private void abrirDialogoImagen() {
+
+        //seteamos la ventana para elegir camara o galeria
+        PickSetup setup = new PickSetup();
+        setup.setTitle(getActivity().getResources().getString(R.string.titulo_dialogo));
+        setup.setProgressText(getActivity().getResources().getString(R.string.texto_cargando));
+        setup.setProgressTextColor(getActivity().getResources().getColor(R.color.colorAccent));
+        setup.setSystemDialog(true);
+
+        PickImageDialog.build(setup)
+                .setOnPickResult(new IPickResult() {
+                    @Override
+                    public void onPickResult(PickResult r) {
+
+//                        //almacenamos la imagen seleccionada
+//                        imgSeleccionada = r.getUri();
+//
+//                        //seteamos la imagen en la cabececera
+//                        Picasso.with(getActivity()).load(r.getUri()).transform(new ImagenCircular()).into(imgPerfil);
+                    }
+                }).show(getFragmentManager());
 
     }
 
