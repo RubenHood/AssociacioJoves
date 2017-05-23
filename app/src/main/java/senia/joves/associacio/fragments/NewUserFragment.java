@@ -115,9 +115,6 @@ public class NewUserFragment extends Fragment {
         //referencia a la tabla de socios
         ref = FirebaseDatabase.getInstance().getReference("socios");
 
-        //referencia al almacenamiento de imagenes de perfil
-        storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://associaciojoves-70d35.appspot.com/socio_perfil/");
-
         //activamos la modificacion del appbar
         setHasOptionsMenu(true);
 
@@ -200,7 +197,7 @@ public class NewUserFragment extends Fragment {
 
         try {
             //validamos los campos
-//            if (validar(nombre, dni, email, direccion, poblacion, telefono)) {
+            if (validar(nombre, dni, email, direccion, poblacion, telefono)) {
 
             //escondemos el teclado virtual
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -257,6 +254,9 @@ public class NewUserFragment extends Fragment {
 
                             }else{
 
+                                //referencia al almacenamiento de imagenes de perfil
+                                storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://associaciojoves-70d35.appspot.com/socio_perfil/" + nombre + ".png");
+
                                 //si hemos elegido imagen la subimos al Storage
                                 storageRef.putFile(imgSeleccionada)
                                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -311,7 +311,7 @@ public class NewUserFragment extends Fragment {
                         }
                     })
                     .show();
-//            }
+            }
         } catch (Exception e) {
             Toast.makeText(getActivity(), getResources().getString(R.string.error_añadir), Toast.LENGTH_SHORT).show();
             FirebaseCrash.log(e.getMessage());
