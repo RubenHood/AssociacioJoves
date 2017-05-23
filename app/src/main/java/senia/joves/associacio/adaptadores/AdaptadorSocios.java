@@ -78,9 +78,9 @@ public class AdaptadorSocios extends BaseAdapter {
 
         //comprobamos si tiene foto de perfil para ponerla o para no ponerla
         if(item.getImagen() == null || item.getImagen().isEmpty()){
-            Picasso.with(context).load(R.drawable.no_perfil).fit().transform(new ImagenCircular()).into(fotoSocio);
+            Picasso.with(context).load(R.drawable.no_perfil).transform(new ImagenCircular()).into(fotoSocio);
         }else {
-            Picasso.with(context).load(item.getImagen()).fit().transform(new ImagenCircular()).error(R.drawable.no_perfil).into(fotoSocio);
+            Picasso.with(context).load(item.getImagen()).transform(new ImagenCircular()).error(R.drawable.no_perfil).into(fotoSocio);
         }
 
         //comprobamos si ha pagado o no, para mostrar un dibujo u otro

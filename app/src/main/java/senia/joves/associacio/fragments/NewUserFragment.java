@@ -1,15 +1,9 @@
 package senia.joves.associacio.fragments;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapRegionDecoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,29 +25,28 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.vansuita.pickimage.bean.PickResult;
+import com.vansuita.pickimage.bundle.PickSetup;
+import com.vansuita.pickimage.dialog.PickImageDialog;
+import com.vansuita.pickimage.listeners.IPickResult;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.File;
 import java.util.regex.Pattern;
 
 import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 
-import static android.app.Activity.RESULT_OK;
-import static com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE;
-import static com.theartofdev.edmodo.cropper.CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE;
-import static com.theartofdev.edmodo.cropper.CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE;
-import static com.theartofdev.edmodo.cropper.CropImage.getActivityResult;
-import static com.theartofdev.edmodo.cropper.CropImage.getPickImageChooserIntent;
 import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
-import static senia.joves.associacio.Static.Recursos.SELECT_FILE;
 
 /**
  * Created by Ruben on 08/05/2017.
@@ -63,14 +55,13 @@ import static senia.joves.associacio.Static.Recursos.SELECT_FILE;
 public class NewUserFragment extends Fragment {
 
     //variables para cargar las imagenes
-    Uri mCropImageUri;
+    Uri imgSeleccionada = null;
 
-    //variable que guarda la imagen seleccionada en bitmap
-    Bitmap imgBitmap;
+    //referencia al modulo de Storage de Firebase
+    StorageReference storageRef;
 
-    //variable que guarda la imagen seleccionada en URI
-    Uri imgURI;
-
+    //variable para el progress dialog
+    private ProgressDialog mProgressDialog;
 
     //referencias a componentes de la vista
     private EditText txfNombre;
@@ -82,7 +73,7 @@ public class NewUserFragment extends Fragment {
     private Switch swSwitch;
     private FloatingActionButton fab;
     private FloatingActionButton fabImagenes;
-    private CropImageView imgPerfil;
+    private ImageView imgPerfil;
 
     //referencia a la bd
     DatabaseReference ref;
@@ -121,7 +112,11 @@ public class NewUserFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_nuevo_socio, container, false);
 
+        //referencia a la tabla de socios
         ref = FirebaseDatabase.getInstance().getReference("socios");
+
+        //referencia al almacenamiento de imagenes de perfil
+        storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://associaciojoves-70d35.appspot.com/socio_perfil/");
 
         //activamos la modificacion del appbar
         setHasOptionsMenu(true);
@@ -151,7 +146,7 @@ public class NewUserFragment extends Fragment {
         txfPoblacion = (EditText) getActivity().findViewById(R.id.txfPoblacion);
         txfTelefono = (EditText) getActivity().findViewById(R.id.txfTelefono);
         swSwitch = (Switch) getActivity().findViewById(R.id.swPagado);
-        imgPerfil = (CropImageView) getActivity().findViewById(R.id.imgNuevoSocio);
+        imgPerfil = (ImageView) getActivity().findViewById(R.id.imgNuevoSocio);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fabImagenes = (FloatingActionButton) getActivity().findViewById(R.id.fabFoto);
 
@@ -159,61 +154,13 @@ public class NewUserFragment extends Fragment {
         swSwitch.setSwitchMinWidth(200);
         swSwitch.setSwitchPadding(20);
 
-        //comprobamos si hay imagen para cargarla y datos escritos anteriormente por el usuario
-//        if (getArguments() != null) {
-//            Bitmap bmp = getArguments().getParcelable("imagen");
-//            imgPerfil.setImageBitmap(bmp);
-//
-//            Socio s = (Socio) getArguments().getSerializable("socio");
-//
-//            //mostramos los datos en sus textView
-//            txfNombre.setText(s.getNombre());
-//            txfDireccion.setText(s.getDireccion());
-//            txfDni.setText(s.getDni());
-//            txfEmail.setText(s.getEmail());
-//            txfPoblacion.setText(s.getPoblacion());
-//            txfTelefono.setText(s.getTelefono());
-//        }
-
         //listener para el boton de añadir imagenes
         fabImagenes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //comprobamos si el movil necesita permisos, si los necesita, los pedimos. Si no abrimos el dialogo picker
-                abrirDialogo();
-
-//                CropImage.startPickImageActivity(getActivity());
-
-                //obtenemos los valores escritos por el usuario
-//                final String nombre = txfNombre.getText().toString();
-//                final String dni = txfDni.getText().toString();
-//                final String email = txfEmail.getText().toString();
-//                final String direccion = txfDireccion.getText().toString();
-//                final String poblacion = txfPoblacion.getText().toString();
-//                final String telefono = txfTelefono.getText().toString();
-//                final String quota;
-//
-//                //comprobamos que eleccion hay en el switch //si es true HA PAGADO si es false no ha pagado
-//                if (swSwitch.isChecked()) {
-//                    quota = "PAGADO";
-//                } else {
-//                    quota = "";
-//                }
-//
-//                //creamos un socio para almacenar los datos ya escritos
-//                Socio s = new Socio();
-//                s.setDireccion(direccion);
-//                s.setNombre(nombre);
-//                s.setDni(dni);
-//                s.setEmail(email);
-//                s.setPoblacion(poblacion);
-//                s.setTelefono(telefono);
-//                s.setQuota(quota);
-//
-//                //Abrimos el dialogo de añadir imagenes
-//                FotoDialog dialog = FotoDialog.newInstance(s);
-//                dialog.show(getFragmentManager(), "foto");
+                //abrimos un dialogo
+                abrirDialogoImagen();
 
             }
         });
@@ -224,159 +171,175 @@ public class NewUserFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //obtenemos los valores escritos por el usuario
-                final String nombre = txfNombre.getText().toString();
-                final String dni = txfDni.getText().toString();
-                final String email = txfEmail.getText().toString();
-                final String direccion = txfDireccion.getText().toString();
-                final String poblacion = txfPoblacion.getText().toString();
-                final String telefono = txfTelefono.getText().toString();
-                final String quota;
+                //validamos e insertamos los datos
+                comprobarInsertarDatos();
 
-                //comprobamos si el socio ha pagado, para checkar o no el switch
-                //comprobamos que eleccion hay en el switch //si es true HA PAGADO si es false no ha pagado
-                if (swSwitch.isChecked()) {
-                    quota = "PAGADO";
-                } else {
-                    quota = "";
-                }
-
-                try {
-                    //validamos los campos
-                    if (validar(nombre, dni, email, direccion, poblacion, telefono)) {
-
-                        //escondemos el teclado virtual
-                        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        View focus = getActivity().getCurrentFocus();
-                        if (focus != null)
-                            inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-                        //Añadimos un socio al contador
-                        NUMERO_ULTIMO_SOCIO++;
-
-                        //mostramos un dialogo para preguntar si estamos seguro de añadir el registro
-                        new AlertDialog.Builder(getActivity())
-                                .setIcon(R.drawable.ic_socios)
-                                .setTitle(R.string.titulo_añadir)
-                                .setMessage(R.string.texto_añadir)
-                                .setNegativeButton(android.R.string.cancel, null)
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        Socio s = new Socio();
-
-                                        //creamos un socio a partir de los datos
-                                        s.setImagen("");
-                                        s.setDireccion(direccion);
-                                        s.setDni(dni);
-                                        s.setEmail(email);
-                                        s.setNombre(nombre);
-                                        s.setQuota(quota);
-                                        s.setTelefono(telefono);
-                                        s.setPoblacion(poblacion);
-                                        s.setSocio(String.valueOf(NUMERO_ULTIMO_SOCIO));
-
-                                        //añadimos un nuevo usuario
-                                        ref.child(nombre).setValue(s);
-
-                                        Toast.makeText(getActivity(), getResources().getString(R.string.exito_añadir) + nombre, Toast.LENGTH_LONG).show();
-
-                                        //salimos del actual fragment
-                                        getFragmentManager().beginTransaction()
-                                                .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
-                                                        R.anim.enter_from_right, R.anim.exit_to_left)
-                                                .replace(R.id.contenido, new SociosFragment()).commit();
-                                    }
-                                })
-                                .show();
-
-
-                    }
-                } catch (Exception e) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.error_añadir), Toast.LENGTH_SHORT).show();
-                    FirebaseCrash.log(e.getMessage());
-                }
             }
         });
     }
 
-    //comprobamos los permisos para lanzar o no el dialogo de elegir imagen
-    @SuppressLint("NewApi")
-    public void abrirDialogo() {
-        if (CropImage.isExplicitCameraPermissionRequired(getActivity())) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
+    //metodo que coge los datos, los valida, coge la imagen seteada (si la hay), i lo sube en Firebase
+    //Storage, luego insertamos los datos en la bd Database Realtime Firebase
+    private void comprobarInsertarDatos() {
+        //obtenemos los valores escritos por el usuario
+        final String nombre = txfNombre.getText().toString();
+        final String dni = txfDni.getText().toString();
+        final String email = txfEmail.getText().toString();
+        final String direccion = txfDireccion.getText().toString();
+        final String poblacion = txfPoblacion.getText().toString();
+        final String telefono = txfTelefono.getText().toString();
+        final String quota;
+
+        //comprobamos si el socio ha pagado, para checkar o no el switch
+        //comprobamos que eleccion hay en el switch //si es true HA PAGADO si es false no ha pagado
+        if (swSwitch.isChecked()) {
+            quota = "PAGADO";
         } else {
-            startPickImageActivity(getActivity());
+            quota = "";
+        }
 
+        try {
+            //validamos los campos
+//            if (validar(nombre, dni, email, direccion, poblacion, telefono)) {
+
+            //escondemos el teclado virtual
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            View focus = getActivity().getCurrentFocus();
+            if (focus != null)
+                inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+            //Añadimos un socio al contador
+            NUMERO_ULTIMO_SOCIO++;
+
+            //mostramos un dialogo para preguntar si estamos seguro de añadir el registro
+            new AlertDialog.Builder(getActivity())
+                    .setIcon(R.drawable.ic_socios)
+                    .setTitle(R.string.titulo_añadir)
+                    .setMessage(R.string.texto_añadir)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            //mostramos un dialogo de carga
+                            mostrarCarga();
+
+                            //comprobamos si hemos elegido una imagen de perfil
+                            if (imgSeleccionada == null) {
+
+                                Socio s = new Socio();
+
+                                //creamos un socio a partir de los datos
+                                s.setImagen("");
+                                s.setDireccion(direccion);
+                                s.setDni(dni);
+                                s.setEmail(email);
+                                s.setNombre(nombre);
+                                s.setQuota(quota);
+                                s.setTelefono(telefono);
+                                s.setPoblacion(poblacion);
+                                s.setSocio(String.valueOf(NUMERO_ULTIMO_SOCIO));
+
+                                //añadimos un nuevo usuario
+                                ref.child(nombre).setValue(s);
+
+                                //escondemos el dialogo de carga
+                                esconderCarga();
+
+                                //mostramos un mensaje de éxito
+                                Toast.makeText(getActivity(), getResources().getString(R.string.exito_añadir) + nombre, Toast.LENGTH_LONG).show();
+
+                                //salimos del actual fragment
+                                getFragmentManager().beginTransaction()
+                                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
+                                                R.anim.enter_from_right, R.anim.exit_to_left)
+                                        .replace(R.id.contenido, new SociosFragment()).commit();
+
+                            }else{
+
+                                //si hemos elegido imagen la subimos al Storage
+                                storageRef.putFile(imgSeleccionada)
+                                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                //una vez subida, obtenemos la url para añadirla al objeto socio
+                                                @SuppressWarnings("VisibleForTests")
+                                                String downloadUrl = taskSnapshot.getDownloadUrl().toString();
+
+                                                //pasamos los datos al objeto socio e insertamos en Realtime DB
+                                                Socio s = new Socio();
+
+                                                //creamos un socio a partir de los datos
+                                                s.setImagen(downloadUrl);
+                                                s.setDireccion(direccion);
+                                                s.setDni(dni);
+                                                s.setEmail(email);
+                                                s.setNombre(nombre);
+                                                s.setQuota(quota);
+                                                s.setTelefono(telefono);
+                                                s.setPoblacion(poblacion);
+                                                s.setSocio(String.valueOf(NUMERO_ULTIMO_SOCIO));
+
+                                                //añadimos un nuevo usuario
+                                                ref.child(nombre).setValue(s);
+
+                                                //escondemos el dialogo de carga
+                                                esconderCarga();
+
+                                                //mostramos un mensaje de éxito
+                                                Toast.makeText(getActivity(), getResources().getString(R.string.exito_añadir) + nombre, Toast.LENGTH_LONG).show();
+
+                                                //salimos del actual fragment
+                                                getFragmentManager().beginTransaction()
+                                                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
+                                                                R.anim.enter_from_right, R.anim.exit_to_left)
+                                                        .replace(R.id.contenido, new SociosFragment()).commit();
+
+
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception exception) {
+                                                FirebaseCrash.log("Error al subir la imagen: " + exception.toString());
+                                                Toast.makeText(getActivity(), getResources().getString(R.string.error_añadir), Toast.LENGTH_LONG).show();
+
+                                            }
+                                        });
+
+                            }
+                        }
+                    })
+                    .show();
+//            }
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_añadir), Toast.LENGTH_SHORT).show();
+            FirebaseCrash.log(e.getMessage());
         }
     }
 
-    //metodo que abre el dialogo de abrir imagen
-    public void startPickImageActivity(@NonNull Activity activity) {
-        this.startActivityForResult(getPickImageChooserIntent(activity), PICK_IMAGE_CHOOSER_REQUEST_CODE);
-    }
+    //metodo que abre un dialogo para abrir una imagen de la galeria o camara, y la almacena e inserta en in imageview
+    private void abrirDialogoImagen() {
 
-    //metodo que abre la actividad para cortar la imagen
-    private void startCropImageActivity(Uri imageUri) {
-        Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).setActivityTitle("Recorte su imagen").setNoOutputImage(true)
-                .getIntent(getContext());
-        this.startActivityForResult(intent, CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-    }
+        //seteamos la ventana para elegir camara o galeria
+        PickSetup setup = new PickSetup();
+        setup.setTitle(getActivity().getResources().getString(R.string.titulo_dialogo));
+        setup.setProgressText(getActivity().getResources().getString(R.string.texto_cargando));
+        setup.setSystemDialog(true);
 
-    //metodo que se ejecuta al cerrarse el dialogo de los permisos
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PickImageDialog.build(setup)
+                .setOnPickResult(new IPickResult() {
+                    @Override
+                    public void onPickResult(PickResult r) {
 
-        if (requestCode == CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startPickImageActivity(getActivity());
-            } else {
-                Toast.makeText(getActivity(), "Debe dar permiso a la aplicación, para poder cargar una imagen.", Toast.LENGTH_LONG).show();
-            }
-        }
-        if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
-            if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // si ya tenemos los permisos abirmos la actividad de crop
-                startCropImageActivity(mCropImageUri);
-            } else {
-                Toast.makeText(getActivity(), "Debe dar permiso a la aplicación, para poder cargar una imagen.", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
+                        //almacenamos la imagen seleccionada
+                        imgSeleccionada = r.getUri();
 
-    //metodo que se ejecuta al acabar de elegir imagen
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+                        //seteamos la imagen en la cabececera
+                        imgPerfil.setImageBitmap(r.getBitmap());
+                    }
+                }).show(getFragmentManager());
 
-        // comprobamos si tenemos permisoss y vamos a cortar la imagen
-        if (requestCode == PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == RESULT_OK) {
-            Uri imageUri = CropImage.getPickImageResultUri(getActivity(), data);
-
-            // For API >= 23 necesitamos los permisos
-            if (CropImage.isReadExternalStoragePermissionsRequired(getActivity(), imageUri)) {
-                // request permissions and handle the result in onRequestPermissionsResult()
-                mCropImageUri = imageUri;
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
-            } else {
-                // si no requerimos permisos
-                startCropImageActivity(imageUri);
-            }
-        }
-
-        Uri resultUri = null;
-
-        //comprobamos si venimos de cortar la imagen, entonces la mostramos al usuario, la subimos a Firebase
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-
-            resultUri = result.getUri();
-
-
-            imgPerfil.setImageUriAsync(resultUri);
-        }
     }
 
     @Override
@@ -384,6 +347,25 @@ public class NewUserFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         super.onDestroy();
+    }
+
+    //metodo que muestra un dialogo de carga
+    private void mostrarCarga() {
+
+        //creamos una barra de carga
+        mProgressDialog = new ProgressDialog(getActivity());
+
+        //mostramos un dialogo
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getResources().getString(R.string.texto_cargando));
+        mProgressDialog.show();
+    }
+
+    private void esconderCarga() {
+        //escondemos el progres dialog
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
     //validar el texto

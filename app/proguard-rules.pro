@@ -23,6 +23,8 @@
 -keepattributes Signature
 -keepattributes *Annotation*
 
+-dontwarn com.squareup.okhttp.**
+
 # This rule will properly ProGuard all the model classes in
 # the package com.yourcompany.models. Modify to fit the structure
 # of your app.

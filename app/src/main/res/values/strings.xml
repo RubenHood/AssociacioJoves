@@ -45,9 +45,7 @@
     <string name="error_actualizar">Ha ocurrido un error al actualizar los datos.</string>
     <string name="error_añadir">Ha ocurrido un error al insertar datos.</string>
     <string name="lbl_pagado">Cuota</string>
-    <string name="titulo_dialogo">Añadir imagen personalizada desde</string>
-    <string name="texto_camara">Cámara</string>
-    <string name="texto_galeria">Galería y otras fuentes</string>
+    <string name="titulo_dialogo">Añadir imagen desde</string>
     <string name="texto_cancelar_qr">Has cancelado el escaneo del código.</string>
     <string name="texto_camara_qr">Centre el Código QR</string>
 </resources>
