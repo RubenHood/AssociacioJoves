@@ -144,34 +144,24 @@ public class SociosFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //comprobamos si hay internet o no
-        if (isNetDisponible() && isOnlineNet()) {
-            //mostramos un barra de progreso
-            mostrarCarga();
+        //mostramos un barra de progreso
+        mostrarCarga();
 
-            // Leemos de la RealTime Database Firebase
-            consultaSocios();
+        // Leemos de la RealTime Database Firebase
+        consultaSocios();
 
-            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.anadirSocio);
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.anadirSocio);
 
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getFragmentManager().beginTransaction()
-                            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                                    R.anim.enter_from_left, R.anim.exit_to_right)
-                            .replace(R.id.contenido, new NewUserFragment())
-                            .addToBackStack("nuevoSocioFragment").commit();
-                }
-            });
-        }else {
-            getFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                            R.anim.enter_from_left, R.anim.exit_to_right)
-                    .replace(R.id.contenido, new SinConexionFragment()).commit();
-        }
-
-
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                                R.anim.enter_from_left, R.anim.exit_to_right)
+                        .replace(R.id.contenido, new NewUserFragment())
+                        .addToBackStack("nuevoSocioFragment").commit();
+            }
+        });
 
 
     }

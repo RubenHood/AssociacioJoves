@@ -63,8 +63,6 @@ public class AdaptadorNoticias extends BaseAdapter {
         //obtenemos el objeto de la tabla a partir de la lista
         Noticia item = LISTA_URL_IMAGENES.get(position);
 
-        Log.e("imagen en adaptador: " , item.getNombre());
-
         //comprobamos si tiene foto de perfil para ponerla o para no ponerla
         Picasso.with(context).load(item.getNombre()).fit().into(img);
 

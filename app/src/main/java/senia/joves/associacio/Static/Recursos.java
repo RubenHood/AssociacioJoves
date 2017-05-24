@@ -20,9 +20,6 @@ public final class Recursos {
     //Array para manejar los socios filtrados
     public static ArrayList<Socio> ARRAY_RECIBIDO = new ArrayList<>();
 
-    //array para los nombres de las imagenes
-    public static final ArrayList<Noticia> LISTA_NOMBRE_IMAGENES = new ArrayList<>();
-
     //array donde guardo las urls de cada imagen
     public static ArrayList<Noticia> LISTA_URL_IMAGENES = null;
 

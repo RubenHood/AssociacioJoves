@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class Noticia implements Serializable, Comparable<Noticia>  {
     private String nombre;
+    private String id;
 
     public Noticia() {
     }
@@ -26,9 +27,17 @@ public class Noticia implements Serializable, Comparable<Noticia>  {
 
     @Override
     public int compareTo(Noticia o) {
-        String a = (String.valueOf(this.getNombre()));
-        String b = (String.valueOf(o.getNombre()));
+        String a = (String.valueOf(this.getId()));
+        String b = (String.valueOf(o.getId()));
 
         return a.compareTo(b);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
