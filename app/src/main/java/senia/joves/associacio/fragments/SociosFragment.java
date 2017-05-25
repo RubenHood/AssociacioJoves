@@ -287,7 +287,7 @@ public class SociosFragment extends PadreFragment {
         super.onStart();
         try {
             //activamos el listener a tiempo real
-            mDatabase.orderByChild("nombre").addValueEventListener(postListener);
+            mDatabase.orderByChild("socio").addValueEventListener(postListener);
 
         } catch (Exception e) {
             FirebaseCrash.log(e.getMessage());
