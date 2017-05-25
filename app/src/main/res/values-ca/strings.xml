@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Joves Seniencs</string>
+
+    <!--TEXTOS-->
+    <string name="texto_añadir">Es va a procedir a inserir les dades. Voleu continuar?</string>
+    <string name="texto_actualizar">Es procedirà a actualitzar les dades. Està segur que desitja actualitzar el soci?</string>
+    <string name="texto_back">Desitja sortir?</string>
+    <string name="texto_boton_registro">REGISTRE</string>
+    <string name="texto_boton_login">LOG IN</string>
+    <string name="texto_cancelar_qr">Has cancel·lat l\'escaner de codis QR.</string>
+    <string name="texto_camara_qr">Centre al mig el codi QR</string>
+    <string name="texto_logout">Log out</string>
+    <string name="texto_cargando">Carregant…</string>
+    <string name="texto_btn_añadir">Afegir</string>
+    <string name="texto_boton_reintentar">reintentar</string>
+    <string name="texto_btn_acercade">Sobre l\'app...</string>
+    <string name="texto_acercade">Aquesta aplicació ha sigut creada pel desarrollador Rubén Vargas Guzman.
+                                  Tot el material que conforma l\'aplicació, es de distribució lliure o ha sigut creat per al seu ús en aquesta aplicació.
+                                  Pots seguir tots els treballs de Rubén Vargas, clicant baix, al seu perfil de GitHub o LinkedIn. </string>
+
+    <!--TITULOS-->
+    <string name="titulo_main_fragment">Associació Joves Seniencs</string>
+    <string name="titulo_login_fragment">Log in</string>
+    <string name="titulo_socios">Socis</string>
+    <string name="titulo_comprobar">Escanejar</string>
+    <string name="titulo_noticias">Noticies</string>
+    <string name="titulo_nuevo">Nou Soci</string>
+    <string name="titulo_back">Sortir</string>
+    <string name="titulo_actualizar">Actualitzar Soci</string>
+    <string name="titulo_añadir">Insertar Soci</string>
+    <string name="titulo_dialogo">Afegir imatge de</string>
+    <string name="titulo_acercade">Sobre...</string>
+
+    <!--LABELS-->
+    <string name="lbl_spinner">Quota soci:</string>
+    <string name="lbl_nombre">Nom:</string>
+    <string name="lbl_direccion">Direcció:</string>
+    <string name="lbl_email">Email:</string>
+    <string name="lbl_poblacion">Població:</string>
+    <string name="lbl_socio">Nº soci:</string>
+    <string name="lbl_telefono">Telèfon:</string>
+    <string name="lbl_dni">DNI:</string>
+    <string name="lbl_pagado">Quota</string>
+    <string name="lbl_email_login">Email</string>
+    <string name="lbl_contrasena_login">Contrasenya</string>
+
+    <!--Errores -->
+    <string name="error_no_internet">No hi ha conexió a internet, ho intentarem en 10 segons.....</string>
+    <string name="error_no_login">Email o contrasenya incorrectes.</string>
+    <string name="error_email">Ha d\'escriure un mail correcte.</string>
+    <string name="error_nombre">Ha d\'escriure un nom correcte.</string>
+    <string name="error_dni">Ha d\'escriure un dni correct.</string>
+    <string name="error_direccion">Ha d\'escriure una dirección correcte.</string>
+    <string name="error_poblacion">Ha d\'escriure una població correcta.</string>
+    <string name="error_telefono">Ha d\'escriure un número de telèfon.</string>
+    <string name="error_consultar">El codi QR no correspon amb cap soci.</string>
+    <string name="error_consultar2">Ha d\'escanejar un codi QR correcte de soci.</string>
+    <string name="error_password">La contrasenya ha de tenir entre 8 i 16 caracters. Almenys un dígit, una minúscula i una majúscula.</string>
+    <string name="error_actualizar">Hi ha hagut un error a l\'actualitzar les dades.</string>
+    <string name="error_añadir">Hi ha hagut un error en inserir dades.</string>
+    <string name="error_onclick">Manteniu premuda la imatge per editar-la.</string>
+
+    <!--EXITOS-->
+    <string name="exito_actualizar">Ha actualitzat correctament a:\n</string>
+    <string name="exito_añadir">Ha afegit correctament a:\n</string>
+    <string name="exito_subir">Ha pujat la imatge correctament. En breu es mostrarà.</string>
+
+    <string name="menu_opcion_buscar">buscar</string>
+    <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>
+    <string name="texto_linkedin"><a href="https://www.linkedin.com/in/rub%C3%A9n-vargas-guzman-660b418a/">LinkedIn</a></string>
+</resources>

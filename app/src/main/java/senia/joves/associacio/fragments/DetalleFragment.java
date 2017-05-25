@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,6 +53,7 @@ import java.util.regex.Pattern;
 import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
+import senia.joves.associacio.fragments.error.SinConexionFragment;
 import senia.joves.associacio.librerias.ImagenCircular;
 
 /**
@@ -139,25 +142,16 @@ public class DetalleFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_detalle, container, false);
 
+        //comprobamos si la toolbar no es null, para setearla
         final Toolbar mToolbar = (Toolbar) rootView.findViewById(R.id.toolbarDetalle);
         if (mToolbar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         }
 
-        //cambiamos la foto del toolbar
-        qr_code = (ImageView) rootView.findViewById(R.id.imageTitulo);
+        //Añadimos un QR al toolbar
+        añadirQR(rootView);
 
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-
-        try {
-            BitMatrix bitMatrix = multiFormatWriter.encode(socio.getNombre(), BarcodeFormat.QR_CODE, 400, 400);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-            qr_code.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-
+        //ponemos el titulo de la actividad vacio
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(" ");
 
         //añadimos el boton de ir atras
@@ -219,149 +213,159 @@ public class DetalleFragment extends Fragment {
 
     }
 
+    //metodo que crea un qr a partir de un nombre
+    private void añadirQR(View rootView) {
+        qr_code = (ImageView) rootView.findViewById(R.id.imageTitulo);
+
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+
+        try {
+            BitMatrix bitMatrix = multiFormatWriter.encode(socio.getNombre(), BarcodeFormat.QR_CODE, 400, 400);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+            qr_code.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
+
     //listener del boton flotante de actualizar socio
     private void onClickFab() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //obtenemos los valores escritos por el usuario
-                final String nombre = txfNombre.getText().toString();
-                final String dni = txfDni.getText().toString();
-                final String email = txfEmail.getText().toString();
-                final String direccion = txfDireccion.getText().toString();
-                final String poblacion = txfPoblacion.getText().toString();
-                final String telefono = txfTelefono.getText().toString();
-                final String quota;
+                //comprobamos si hay internet, para lanzar la aplicación o no.
+                if (isNetDisponible() || isOnlineNet()) {
+                    //obtenemos los valores escritos por el usuario
+                    final String nombre = txfNombre.getText().toString();
+                    final String dni = txfDni.getText().toString();
+                    final String email = txfEmail.getText().toString();
+                    final String direccion = txfDireccion.getText().toString();
+                    final String poblacion = txfPoblacion.getText().toString();
+                    final String telefono = txfTelefono.getText().toString();
+                    final String quota;
 
 
-                //comprobamos que eleccion hay en el switch //si es true HA PAGADO si es false no ha pagado
-                if (swSwitch.isChecked()) {
-                    quota = "PAGADO";
-                } else {
-                    quota = "";
-                }
+                    //comprobamos que eleccion hay en el switch //si es true HA PAGADO si es false no ha pagado
+                    if (swSwitch.isChecked()) {
+                        quota = "PAGADO";
+                    } else {
+                        quota = "";
+                    }
 
-                try {
-                    //validamos los campos
-                    if (validar(nombre, dni, email, direccion, poblacion, telefono)) {
+                    try {
+                        //validamos los campos
+                        if (validar(nombre, dni, email, direccion, poblacion, telefono)) {
 
-                        //escondemos el teclado virtual
-                        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        View focus = getActivity().getCurrentFocus();
-                        if (focus != null)
-                            inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                            //escondemos el teclado virtual
+                            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            View focus = getActivity().getCurrentFocus();
+                            if (focus != null)
+                                inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                        //mostramos un dialogo para preguntar si estamos seguro de actualizar el registro
-                        new AlertDialog.Builder(getActivity())
-                                .setIcon(R.drawable.ic_action_person)
-                                .setTitle(R.string.titulo_actualizar)
-                                .setMessage(R.string.texto_actualizar)
-                                .setNegativeButton(android.R.string.cancel, null)
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                            //mostramos un dialogo para preguntar si estamos seguro de actualizar el registro
+                            new AlertDialog.Builder(getActivity())
+                                    .setIcon(R.drawable.ic_action_person)
+                                    .setTitle(R.string.titulo_actualizar)
+                                    .setMessage(R.string.texto_actualizar)
+                                    .setNegativeButton(android.R.string.cancel, null)
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
 
-                                        //mostramos un dialogo de carga
-                                        mostrarCarga();
+                                            //mostramos un dialogo de carga
+                                            mostrarCarga();
 
-                                        //comprobamos si hemos elegido una imagen de perfil, para actualizarla o no
-                                        if (imgSeleccionada == null) {
-                                            Socio s = new Socio();
+                                            //comprobamos si hemos elegido una imagen de perfil, para actualizarla o no
+                                            if (imgSeleccionada == null) {
+                                                actualizarSocio(nombre, dni, email, direccion, poblacion, telefono, quota, socio, "");
 
-                                            //creamos un socio a partir de los datos
-                                            s.setImagen(socio.getImagen());
-                                            s.setDireccion(direccion);
-                                            s.setDni(dni);
-                                            s.setEmail(email);
-                                            s.setNombre(nombre);
-                                            s.setQuota(quota);
-                                            s.setTelefono(telefono);
-                                            s.setPoblacion(poblacion);
-                                            s.setSocio(socio.getSocio());
+                                            } else {
+                                                //referencia al almacenamiento de imagenes de perfil
+                                                storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://associaciojoves-70d35.appspot.com/socio_perfil/" + nombre + ".png");
 
+                                                //si hemos elegido imagen la subimos al Storage
+                                                storageRef.putFile(imgSeleccionada)
+                                                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                                //una vez subida, obtenemos la url para añadirla al objeto socio
+                                                                @SuppressWarnings("VisibleForTests")
+                                                                String downloadUrl = taskSnapshot.getDownloadUrl().toString();
 
-                                            //añadimos un nuevo usuario
-                                            ref.child(socio.getNombre()).setValue(s);
+                                                                //actualizamos el socio, y su url de la imagen
+                                                                actualizarSocio(nombre, dni, email, direccion, poblacion, telefono, quota, socio, downloadUrl);
 
-                                            //escondemos el dialogo de carga
-                                            esconderCarga();
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception exception) {
+                                                                FirebaseCrash.log("Error al subir la imagen: " + exception.toString());
+                                                                Toast.makeText(getActivity(), getResources().getString(R.string.error_añadir), Toast.LENGTH_LONG).show();
 
-                                            //mostramos un mensaje de exito
-                                            Toast.makeText(getActivity(), getResources().getString(R.string.exito_actualizar) + nombre, Toast.LENGTH_LONG).show();
+                                                            }
+                                                        });
 
-                                            //salimos del actual fragment
-                                            getFragmentManager().beginTransaction()
-                                                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
-                                                            R.anim.enter_from_right, R.anim.exit_to_left)
-                                                    .replace(R.id.contenido, new SociosFragment()).commit();
-                                        } else {
-                                            //referencia al almacenamiento de imagenes de perfil
-                                            storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://associaciojoves-70d35.appspot.com/socio_perfil/" + nombre + ".png");
-
-                                            //si hemos elegido imagen la subimos al Storage
-                                            storageRef.putFile(imgSeleccionada)
-                                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                                        @Override
-                                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                            //una vez subida, obtenemos la url para añadirla al objeto socio
-                                                            @SuppressWarnings("VisibleForTests")
-                                                            String downloadUrl = taskSnapshot.getDownloadUrl().toString();
-
-                                                            //pasamos los datos al objeto socio e insertamos en Realtime DB
-                                                            Socio s = new Socio();
-
-                                                            //creamos un socio a partir de los datos
-                                                            s.setImagen(downloadUrl);
-                                                            s.setDireccion(direccion);
-                                                            s.setDni(dni);
-                                                            s.setEmail(email);
-                                                            s.setNombre(nombre);
-                                                            s.setQuota(quota);
-                                                            s.setTelefono(telefono);
-                                                            s.setPoblacion(poblacion);
-                                                            s.setSocio(socio.getSocio());
-
-                                                            //añadimos un nuevo usuario
-                                                            ref.child(socio.getNombre()).setValue(s);
-
-                                                            //escondemos el dialogo de carga
-                                                            esconderCarga();
-
-                                                            //mostramos un mensaje de éxito
-                                                            Toast.makeText(getActivity(), getResources().getString(R.string.exito_actualizar) + nombre, Toast.LENGTH_LONG).show();
-
-                                                            //salimos del actual fragment
-                                                            getFragmentManager().beginTransaction()
-                                                                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
-                                                                            R.anim.enter_from_right, R.anim.exit_to_left)
-                                                                    .replace(R.id.contenido, new SociosFragment()).commit();
-
-
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception exception) {
-                                                            FirebaseCrash.log("Error al subir la imagen: " + exception.toString());
-                                                            Toast.makeText(getActivity(), getResources().getString(R.string.error_añadir), Toast.LENGTH_LONG).show();
-
-                                                        }
-                                                    });
+                                            }
 
                                         }
+                                    })
+                                    .show();
 
-                                    }
-                                })
-                                .show();
-
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), getResources().getString(R.string.error_añadir), Toast.LENGTH_SHORT).show();
+                        FirebaseCrash.log(e.getMessage());
                     }
-                } catch (Exception e) {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.error_añadir), Toast.LENGTH_SHORT).show();
-                    FirebaseCrash.log(e.getMessage());
+
+                }else{
+                    getFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                                    R.anim.enter_from_left, R.anim.exit_to_right)
+                            .replace(R.id.contenido, new SinConexionFragment()).commit();
+
                 }
+
             }
         });
+    }
+
+    //metodo que actualiza el socio si no se ha cambiado la imagen de perfil
+    private void actualizarSocio(String nombre, String dni, String email, String direccion, String poblacion, String telefono, String quota, Socio socio, String url) {
+
+        Socio s = new Socio();
+
+        //comprobamos si la url viene vacia, para actualizarla o no
+        if (url.equals("")) {
+            s.setImagen(socio.getImagen());
+        } else {
+            s.setImagen(url);
+        }
+        s.setDireccion(direccion);
+        s.setDni(dni);
+        s.setEmail(email);
+        s.setNombre(nombre);
+        s.setQuota(quota);
+        s.setTelefono(telefono);
+        s.setPoblacion(poblacion);
+        s.setSocio(socio.getSocio());
+
+        //añadimos un nuevo usuario
+        ref.child(socio.getNombre()).setValue(s);
+
+        //escondemos el dialogo de carga
+        esconderCarga();
+
+        //mostramos un mensaje de exito
+        Toast.makeText(getActivity(), getResources().getString(R.string.exito_actualizar) + nombre, Toast.LENGTH_LONG).show();
+
+        //salimos del actual fragment
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
+                        R.anim.enter_from_right, R.anim.exit_to_left)
+                .replace(R.id.contenido, new SociosFragment()).commit();
     }
 
     //listener al boton
@@ -411,6 +415,36 @@ public class DetalleFragment extends Fragment {
 
     }
 
+    private boolean isNetDisponible() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
+    }
+
+    public Boolean isOnlineNet() {
+
+        try {
+            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
+
+            int val = p.waitFor();
+            boolean reachable = (val == 0);
+            return reachable;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //Escondemos el elemento de carga
+        esconderCarga();
+    }
 
     //metodo que muestra un dialogo de carga
     private void mostrarCarga() {

@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,12 +41,12 @@ import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
 import com.vansuita.pickimage.listeners.IPickResult;
 
-import java.io.File;
 import java.util.regex.Pattern;
 
 import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
+import senia.joves.associacio.fragments.error.SinConexionFragment;
 
 import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
 
@@ -171,8 +173,17 @@ public class NewUserFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //validamos e insertamos los datos
-                comprobarInsertarDatos();
+                //comprobamos si hay internet, para lanzar la aplicación o no.
+                if (isNetDisponible() || isOnlineNet()) {
+                    //validamos e insertamos los datos
+                    comprobarInsertarDatos();
+
+                }else{
+                    getFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                                    R.anim.enter_from_left, R.anim.exit_to_right)
+                            .replace(R.id.contenido, new SinConexionFragment()).commit();
+                }
 
             }
         });
@@ -364,6 +375,30 @@ public class NewUserFragment extends Fragment {
         mProgressDialog.show();
     }
 
+    public boolean isNetDisponible() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
+    }
+
+    public Boolean isOnlineNet() {
+
+        try {
+            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
+
+            int val = p.waitFor();
+            boolean reachable = (val == 0);
+            return reachable;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private void esconderCarga() {
         //escondemos el progres dialog
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
@@ -440,5 +475,10 @@ public class NewUserFragment extends Fragment {
         return patron.matcher(correo).matches();
     }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        //Escondemos el elemento de carga
+        esconderCarga();
+    }
 }

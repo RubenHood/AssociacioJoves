@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Joves Seniencs</string>
+
+    <!--TEXTOS-->
+    <string name="texto_añadir">You will proceed to insert the data. Do you wish to continue?</string>
+    <string name="texto_actualizar">The data will be updated. Are you sure you want to update your partner?</string>
+    <string name="texto_back">Want to go out?</string>
+    <string name="texto_boton_registro">REGISTER</string>
+    <string name="texto_boton_login">LOG IN</string>
+    <string name="texto_cancelar_qr">You have canceled the code scan.</string>
+    <string name="texto_camara_qr">Center QR Code</string>
+    <string name="texto_logout">Log out</string>
+    <string name="texto_cargando">Loading…</string>
+    <string name="texto_btn_añadir">Add</string>
+    <string name="texto_boton_reintentar">retry</string>
+    <string name="texto_btn_acercade">About...</string>
+    <string name="texto_acercade">This application has been created by the developer Rubén Vargas Guzman.
+                                  All the material used is free distribution or has been created for use in this App.
+                                  You can follow all the works of Rubén Vargas, clicking below, in his profile of GitHub and LinkedIn. </string>
+
+    <!--TITULOS-->
+    <string name="titulo_main_fragment">Associación Jóvenes Seniencs</string>
+    <string name="titulo_login_fragment">Log in</string>
+    <string name="titulo_socios">About us</string>
+    <string name="titulo_comprobar">Scan</string>
+    <string name="titulo_noticias">News</string>
+    <string name="titulo_nuevo">New Member</string>
+    <string name="titulo_back">Exit</string>
+    <string name="titulo_actualizar">Update Member</string>
+    <string name="titulo_añadir">Insert member</string>
+    <string name="titulo_dialogo">Add picture from</string>
+    <string name="titulo_acercade">About</string>
+
+    <!--LABELS-->
+    <string name="lbl_nombre">Name:</string>
+    <string name="lbl_direccion">Address:</string>
+    <string name="lbl_email">Email:</string>
+    <string name="lbl_poblacion">Town or city:</string>
+    <string name="lbl_socio">Nº member:</string>
+    <string name="lbl_telefono">Telefon:</string>
+    <string name="lbl_dni">DNI:</string>
+    <string name="lbl_pagado">Fee</string>
+    <string name="lbl_email_login">Email</string>
+    <string name="lbl_contrasena_login">Password</string>
+
+    <!--Errores -->
+    <string name="error_no_internet">There is no internet connection, retrying in 10 seconds .....</string>
+    <string name="error_no_login">Wrong email or password</string>
+    <string name="error_email">Debe escribir un email correcto.</string>
+    <string name="error_nombre">You must write a correct email.</string>
+    <string name="error_dni">You must write a correct dni.</string>
+    <string name="error_direccion">You must enter a correct address.</string>
+    <string name="error_poblacion">You must write a correct population.</string>
+    <string name="error_telefono">You must enter a phone number.</string>
+    <string name="error_consultar">The QR code does not correspond to any partner.</string>
+    <string name="error_consultar2">You must scan a valid QR code.</string>
+    <string name="error_password">Password must be between 8 and 16 characters. At least one digit, one lowercase and one uppercase.</string>
+    <string name="error_actualizar">There was an error updating the data.</string>
+    <string name="error_añadir">There was an error inserting data.</string>
+    <string name="error_onclick">Touch and hold the image to edit it.</string>
+
+    <!--EXITOS-->
+    <string name="exito_actualizar">You have successfully updated:\n</string>
+    <string name="exito_añadir">You have successfully added to:\n</string>
+    <string name="exito_subir">You uploaded the image correctly. It will be displayed shortly.</string>
+
+    <string name="menu_opcion_buscar">search</string>
+    <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>
+    <string name="texto_linkedin"><a href="https://www.linkedin.com/in/rub%C3%A9n-vargas-guzman-660b418a/">LinkedIn</a></string>
+</resources>

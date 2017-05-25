@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.sylversky.fontreplacer.FontReplacer;
+import com.sylversky.fontreplacer.Replacer;
 
 import java.util.regex.Pattern;
 
@@ -38,6 +40,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //cambiamos la fuente del proyecto
+        Replacer replacer = FontReplacer.Build(getApplicationContext());
+        replacer.setDefaultFont("fonts/ProductSans-Regular.ttf");
+        replacer.setBoldFont("fonts/ProductSans-Bold.ttf");
+        replacer.setBoldItalicFont("fonts/ProductSans-Bold-Italic.ttf");
+        replacer.setItalicFont("fonts/ProductSans-Italic.ttf");
+        replacer.applyFont();
 
         //creamos una barra de carga
         mProgressDialog = new ProgressDialog(this);

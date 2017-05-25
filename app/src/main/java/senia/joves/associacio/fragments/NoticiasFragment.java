@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -48,7 +47,7 @@ import static senia.joves.associacio.Static.Recursos.LISTA_URL_IMAGENES;
  * Created by Ruben on 08/05/2017.
  */
 
-public class NoticiasFragment extends Fragment {
+public class NoticiasFragment extends PadreFragment {
 
     //Listener que escucha si hay cambios en la BD de FIREBASE
     ValueEventListener postListener;
@@ -307,6 +306,8 @@ public class NoticiasFragment extends Fragment {
             mDatabase.removeEventListener(postListener);
         }
 
+        //Escondemos el elemento de carga
+        esconderCarga();
     }
 
     //metodo que genera un token aleatorio para el nombre de la imagen

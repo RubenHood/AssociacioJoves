@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -49,8 +48,7 @@
                 android:layout_marginLeft="26dp"
                 android:layout_marginStart="26dp"
                 android:layout_toEndOf="@+id/icono"
-                android:layout_toRightOf="@+id/icono"
-                android:fontFamily="sans-serif-smallcaps" />
+                android:layout_toRightOf="@+id/icono" />
 
             <ImageView
                 android:id="@+id/pagado"

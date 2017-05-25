@@ -1,14 +1,10 @@
 package senia.joves.associacio.fragments;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -36,7 +32,6 @@ import senia.joves.associacio.MainActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.adaptadores.AdaptadorSocios;
 import senia.joves.associacio.entidades.Socio;
-import senia.joves.associacio.fragments.error.SinConexionFragment;
 
 import static senia.joves.associacio.Static.Recursos.LISTA_SOCIOS;
 import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
@@ -46,7 +41,7 @@ import static senia.joves.associacio.Static.Recursos.ARRAY_RECIBIDO;
  * Created by Usuario on 08/05/2017.
  */
 
-public class SociosFragment extends Fragment {
+public class SociosFragment extends PadreFragment {
 
     //variable para el progress dialog
     private ProgressDialog mProgressDialog;
@@ -222,6 +217,7 @@ public class SociosFragment extends Fragment {
         }
     }
 
+
     //metodo que a partir del array, rellenamos la interfaz
     private void rellenarInterfaz() {
 
@@ -267,40 +263,16 @@ public class SociosFragment extends Fragment {
         });
     }
 
-    private boolean isNetDisponible() {
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
-
-        return (actNetInfo != null && actNetInfo.isConnected());
-    }
-
-    public Boolean isOnlineNet() {
-
-        try {
-            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
-
-            int val = p.waitFor();
-            boolean reachable = (val == 0);
-            return reachable;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     //metodo que muestra un dialogo de carga
     private void mostrarCarga() {
 
-        //creamos una barra de carga
-        mProgressDialog = new ProgressDialog(getActivity());
+            //creamos una barra de carga
+            mProgressDialog = new ProgressDialog(getActivity());
 
-        //mostramos un dialogo
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(getResources().getString(R.string.texto_cargando));
-        mProgressDialog.show();
+            //mostramos un dialogo
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setMessage(getResources().getString(R.string.texto_cargando));
+            mProgressDialog.show();
     }
 
     private void esconderCarga() {
@@ -314,7 +286,9 @@ public class SociosFragment extends Fragment {
     public void onStart() {
         super.onStart();
         try {
+            //activamos el listener a tiempo real
             mDatabase.orderByChild("nombre").addValueEventListener(postListener);
+
         } catch (Exception e) {
             FirebaseCrash.log(e.getMessage());
         }
@@ -327,5 +301,10 @@ public class SociosFragment extends Fragment {
             mDatabase.removeEventListener(postListener);
         }
 
+        //Escondemos el elemento de carga
+        esconderCarga();
+
     }
+
+
 }

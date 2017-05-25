@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Joves Seniencs</string>
 
@@ -12,8 +13,8 @@
     <string name="texto_logout">Log out</string>
     <string name="texto_cargando">Cargando…</string>
     <string name="texto_btn_añadir">Añadir</string>
-    <string name="texto_btn_acercade">Acerca de...</string>
     <string name="texto_boton_reintentar">reintentar</string>
+    <string name="texto_btn_acercade">Acerca de...</string>
     <string name="texto_acercade">Esta aplicación ha sido creada por el desarrollador Rubén Vargas Guzman.
                                   Todo el material usado es de distribución libre o ha sido creado para su uso en esta App.
                                   Puedes seguir todos los trabajos de Rubén Vargas, clicando abajo, en su perfil de GitHub y LinkedIn. </string>
@@ -68,6 +69,4 @@
     <string name="menu_opcion_buscar">buscar</string>
     <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>
     <string name="texto_linkedin"><a href="https://www.linkedin.com/in/rub%C3%A9n-vargas-guzman-660b418a/">LinkedIn</a></string>
-
-
 </resources>

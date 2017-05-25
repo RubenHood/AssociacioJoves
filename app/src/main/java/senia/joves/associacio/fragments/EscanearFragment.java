@@ -275,6 +275,10 @@ public class EscanearFragment extends Fragment {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+
+        //Escondemos el elemento de carga
+        esconderCarga();
+
     }
 
 }
