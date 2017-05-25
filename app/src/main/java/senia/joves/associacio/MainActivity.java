@@ -45,11 +45,19 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.socios:
-                        if (navigation.getSelectedItemId() == R.id.eventos || navigation.getSelectedItemId() == R.id.noticias) {
+                        //comprobamos si hay internet, para lanzar la aplicación o no.
+                        if (isNetDisponible() || isOnlineNet()) {
+                            if (navigation.getSelectedItemId() == R.id.eventos || navigation.getSelectedItemId() == R.id.noticias) {
+                                getSupportFragmentManager().beginTransaction()
+                                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                                                R.anim.enter_from_left, R.anim.exit_to_right)
+                                        .replace(R.id.contenido, new SociosFragment()).commit();
+                            }
+                        } else {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                                             R.anim.enter_from_left, R.anim.exit_to_right)
-                                    .replace(R.id.contenido, new SociosFragment()).commit();
+                                    .replace(R.id.contenido, new SinConexionFragment()).commit();
                         }
 
                         return true;
@@ -68,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                                                 R.anim.enter_from_right, R.anim.exit_to_left)
                                         .replace(R.id.contenido, new EscanearFragment()).commit();
                             }
-                        }else{
+                        } else {
                             getSupportFragmentManager().beginTransaction()
                                     .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                                             R.anim.enter_from_left, R.anim.exit_to_right)
@@ -77,11 +85,20 @@ public class MainActivity extends AppCompatActivity {
 
                         return true;
                     case R.id.noticias:
-                        if (navigation.getSelectedItemId() == R.id.socios || navigation.getSelectedItemId() == R.id.eventos) {
+                        //comprobamos si hay internet, para lanzar la aplicación o no.
+                        if (isNetDisponible() || isOnlineNet()) {
+                            if (navigation.getSelectedItemId() == R.id.socios || navigation.getSelectedItemId() == R.id.eventos) {
+                                getSupportFragmentManager().beginTransaction()
+                                        .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
+                                                R.anim.enter_from_right, R.anim.exit_to_left)
+                                        .replace(R.id.contenido, new NoticiasFragment()).commit();
+                            }
+                        } else {
                             getSupportFragmentManager().beginTransaction()
-                                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
-                                            R.anim.enter_from_right, R.anim.exit_to_left)
-                                    .replace(R.id.contenido, new NoticiasFragment()).commit();
+                                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                                            R.anim.enter_from_left, R.anim.exit_to_right)
+                                    .replace(R.id.contenido, new SinConexionFragment()).commit();
+
                         }
                         return true;
                 }
@@ -89,8 +106,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //cargamos el fragment de noticias que va el primero
-        getSupportFragmentManager().beginTransaction().replace(R.id.contenido, new NoticiasFragment()).commit();
+        //comprobamos si hay internet, para lanzar la aplicación o no.
+        if (isNetDisponible() || isOnlineNet()) {
+            //cargamos el fragment de noticias que va el primero
+            getSupportFragmentManager().beginTransaction().replace(R.id.contenido, new NoticiasFragment()).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
+                            R.anim.enter_from_left, R.anim.exit_to_right)
+                    .replace(R.id.contenido, new SinConexionFragment()).commit();
+        }
     }
 
     @Override

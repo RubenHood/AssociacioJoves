@@ -12,6 +12,11 @@
         android:title="@string/texto_logout" />
 
     <item
+        android:id="@+id/filtrar"
+        android:icon="@drawable/ic_action_filter_list"
+        android:title="@string/texto_filtrar"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/acercaDe"
         android:title="@string/texto_btn_acercade" />
 </menu>

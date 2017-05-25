@@ -9,6 +9,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +34,7 @@ import senia.joves.associacio.R;
 import senia.joves.associacio.adaptadores.AdaptadorSocios;
 import senia.joves.associacio.entidades.Socio;
 
+import static senia.joves.associacio.Static.Recursos.FILTRADO;
 import static senia.joves.associacio.Static.Recursos.LISTA_SOCIOS;
 import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
 import static senia.joves.associacio.Static.Recursos.ARRAY_RECIBIDO;
@@ -102,6 +104,9 @@ public class SociosFragment extends PadreFragment {
             case R.id.acercaDe:
                 new AcercaDeFragment().show(getFragmentManager(), "AcercaDe");
                 break;
+            case R.id.filtrar:
+                new DialogoFragmentFiltro().show(getFragmentManager(), "Filtrar");
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -147,6 +152,7 @@ public class SociosFragment extends PadreFragment {
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.anadirSocio);
 
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,9 +173,6 @@ public class SociosFragment extends PadreFragment {
         postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                //contamos los socios que hay para saber que id poner luego
-                NUMERO_ULTIMO_SOCIO = (int) dataSnapshot.getChildrenCount();
 
                 // recogemos los datos
                 obtenerSocios(dataSnapshot);
@@ -197,9 +200,11 @@ public class SociosFragment extends PadreFragment {
 
         LISTA_SOCIOS.clear();
 
+        Socio s = null;
+
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             //creamos un objeto socio
-            Socio s = new Socio();
+            s = new Socio();
 
             //obtenemos a partir del DataSnapshot cada dato, lo pasamos al objeto
             s.setDireccion(ds.child("direccion").getValue().toString());
@@ -212,9 +217,24 @@ public class SociosFragment extends PadreFragment {
             s.setTelefono(ds.child("telefono").getValue().toString());
             s.setImagen(ds.child("imagen").getValue().toString());
 
+            //comprobamos el numero de socio mas alto
+            recogerMayorID(Integer.parseInt(s.getSocio()));
+
             //metemos el objeto en el array
             LISTA_SOCIOS.add(s);
         }
+
+
+
+    }
+
+    //metodo que comprueba si el numero de socio actual es mas alto que el almacenado, para guardarlo o no
+    private void recogerMayorID(int numSocio){
+
+        if(numSocio > NUMERO_ULTIMO_SOCIO){
+            NUMERO_ULTIMO_SOCIO = numSocio;
+        }
+
     }
 
 
@@ -285,9 +305,10 @@ public class SociosFragment extends PadreFragment {
     @Override
     public void onStart() {
         super.onStart();
+        Log.e("FILTRADO: ", FILTRADO +"");
         try {
             //activamos el listener a tiempo real
-            mDatabase.orderByChild("socio").addValueEventListener(postListener);
+            mDatabase.orderByChild(FILTRADO).addValueEventListener(postListener);
 
         } catch (Exception e) {
             FirebaseCrash.log(e.getMessage());

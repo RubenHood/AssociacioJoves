@@ -14,6 +14,10 @@
     <string name="texto_btn_añadir">Añadir</string>
     <string name="texto_btn_acercade">Acerca de...</string>
     <string name="texto_boton_reintentar">reintentar</string>
+    <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>
+    <string name="texto_linkedin"><a href="https://www.linkedin.com/in/rub%C3%A9n-vargas-guzman-660b418a/">LinkedIn</a></string>
+    <string name="texto_filtrar">filtrar</string>
+    <string name="texto_filtrar2">Elija el filtrado para los socios:</string>
     <string name="texto_acercade">Esta aplicación ha sido creada por el desarrollador Rubén Vargas Guzman.
                                   Todo el material usado es de distribución libre o ha sido creado para su uso en esta App.
                                   Puedes seguir todos los trabajos de Rubén Vargas, clicando abajo, en su perfil de GitHub y LinkedIn. </string>
@@ -30,6 +34,7 @@
     <string name="titulo_añadir">Insertar Socio</string>
     <string name="titulo_dialogo">Añadir imagen desde</string>
     <string name="titulo_acercade">Acerca de</string>
+    <string name="titulo_dialogo_filtrar">Filtrar socios</string>
 
     <!--LABELS-->
     <string name="lbl_nombre">Nombre:</string>
@@ -65,8 +70,12 @@
     <string name="exito_subir">Ha subido la imagen correctamente. En breve se mostrará.</string>
 
     <string name="menu_opcion_buscar">buscar</string>
-    <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>
-    <string name="texto_linkedin"><a href="https://www.linkedin.com/in/rub%C3%A9n-vargas-guzman-660b418a/">LinkedIn</a></string>
 
+    <!--Arrays-->
+    <string-array name="filtros">
+        <item>Nombre</item>
+        <item>Nº Socio</item>
+        <item>Cuota pagada</item>
+    </string-array>
 
 </resources>
