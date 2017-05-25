@@ -30,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txfEmail;
     private EditText txfPass;
     private Button btnLogin;
-    private Button btnRegistro;
 
     //variable para el progress dialog
     private ProgressDialog mProgressDialog;
@@ -59,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
         txfEmail = (EditText) findViewById(R.id.txfEmail);
         txfPass = (EditText) findViewById(R.id.txfPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnRegistro = (Button) findViewById(R.id.btnRegistro);
 
         //añadimos listeners a los botonoes
         añadirListeners();
