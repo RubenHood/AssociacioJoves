@@ -7,6 +7,6 @@
     <ImageView
         android:id="@+id/img_noticias"
         android:layout_width="match_parent"
-        android:layout_height="512dp"
+        android:layout_height="565dp"
         android:scaleType="fitXY" />
 </LinearLayout>

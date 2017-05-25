@@ -33,7 +33,6 @@
     <string name="titulo_acercade">Sobre...</string>
 
     <!--LABELS-->
-    <string name="lbl_spinner">Quota soci:</string>
     <string name="lbl_nombre">Nom:</string>
     <string name="lbl_direccion">Direcció:</string>
     <string name="lbl_email">Email:</string>

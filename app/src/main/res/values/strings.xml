@@ -32,7 +32,6 @@
     <string name="titulo_acercade">Acerca de</string>
 
     <!--LABELS-->
-    <string name="lbl_spinner">Quota socio:</string>
     <string name="lbl_nombre">Nombre:</string>
     <string name="lbl_direccion">Dirección:</string>
     <string name="lbl_email">Email:</string>

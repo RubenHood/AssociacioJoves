@@ -69,9 +69,6 @@ public class LoginActivity extends AppCompatActivity {
 
         //añadimos el listener al boton de login
         onClickLogin();
-
-        //añadimos el listener al boton de registro
-        onClickRegistro();
     }
 
     //listener boton login
@@ -124,56 +121,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    //listener del boton de registro
-    private void onClickRegistro(){
-        btnRegistro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String email = txfEmail.getText().toString();
-                String password = txfPass.getText().toString();
-
-                //validamos al clicar en login
-                if (validarEmail(email)) {
-                    if (validarPassword(password)) {
-
-                        //mostramos un dialogo
-                        mProgressDialog.setCancelable(false);
-                        mProgressDialog.setMessage(getResources().getString(R.string.texto_cargando));
-                        mProgressDialog.show();
-
-                        mAuth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                        //escondemos el progres dialog
-                                        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                                            mProgressDialog.dismiss();
-                                        }
-
-                                        if (task.isSuccessful()) {
-                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                        } else {
-                                            Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.error_no_login), Snackbar.LENGTH_LONG).show();
-                                        }
-                                    }
-                                });
-                    } else {
-                        txfPass.requestFocus();
-                        txfPass.setError(getResources().getString(R.string.error_password));
-
-                    }
-                } else {
-                    txfEmail.requestFocus();
-                    txfEmail.setError(getResources().getString(R.string.error_email));
-
-                }
-
-            }
-        });
     }
 
     //al empezar la actividad, comprobamos si el usuario esta logueado, para cargar o no el login
