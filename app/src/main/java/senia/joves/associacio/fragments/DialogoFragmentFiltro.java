@@ -20,15 +20,13 @@ import static senia.joves.associacio.Static.Recursos.OPCION_FILTRADO;
 
 public class DialogoFragmentFiltro extends DialogFragment {
 
+    //referencias a objetos de la vista
     Spinner spn;
     Button btnFiltrar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        //hacemos que no se pueda salir al tocar fuera del dialogo
-        setCancelable(false);
 
         return inflater.inflate(R.layout.fragment_filtrado, container, false);
     }
@@ -49,8 +47,8 @@ public class DialogoFragmentFiltro extends DialogFragment {
             public void onClick(View v) {
 
                 //cambiamos el valor estatico del filtrado para que se filtren los socios
-                switch ((String) spn.getSelectedItem()){
-                    case "nombre":
+                switch ((String) spn.getSelectedItem()) {
+                    case "Nombre":
                         FILTRADO = "nombre";
                         break;
                     case "Nº Socio":
@@ -61,17 +59,14 @@ public class DialogoFragmentFiltro extends DialogFragment {
                         break;
                 }
 
-
                 //almacenamos el valor del spiner
                 OPCION_FILTRADO = spn.getSelectedItemPosition();
 
                 //cerramos el dialogo
                 dismiss();
 
-                getFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
-                                R.anim.enter_from_left, R.anim.exit_to_right)
-                        .replace(R.id.contenido, new SociosFragment()).commit();
+                //Ir al dialogo de socios
+                getFragmentManager().beginTransaction().replace(R.id.contenido, new SociosFragment()).commit();
             }
         });
 

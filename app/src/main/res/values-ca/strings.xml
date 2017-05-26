@@ -12,6 +12,8 @@
     <string name="texto_camara_qr">Centre al mig el codi QR</string>
     <string name="texto_logout">Log out</string>
     <string name="texto_cargando">Carregant…</string>
+    <string name="texto_filtrar">filtre</string>
+    <string name="texto_filtrar2">Tria un filtratge per als socis:</string>
     <string name="texto_btn_añadir">Afegir</string>
     <string name="texto_boton_reintentar">reintentar</string>
     <string name="texto_btn_acercade">Sobre l\'app...</string>
@@ -31,6 +33,8 @@
     <string name="titulo_añadir">Insertar Soci</string>
     <string name="titulo_dialogo">Afegir imatge de</string>
     <string name="titulo_acercade">Sobre...</string>
+    <string name="titulo_dialogo_filtrar">Filtre de socis</string>
+
 
     <!--LABELS-->
     <string name="lbl_nombre">Nom:</string>
@@ -68,4 +72,11 @@
     <string name="menu_opcion_buscar">buscar</string>
     <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>
     <string name="texto_linkedin"><a href="https://www.linkedin.com/in/rub%C3%A9n-vargas-guzman-660b418a/">LinkedIn</a></string>
+
+    <!--Arrays-->
+    <string-array name="filtros">
+        <item>Nom</item>
+        <item>Nº Soci</item>
+        <item>Quota pagada</item>
+    </string-array>
 </resources>

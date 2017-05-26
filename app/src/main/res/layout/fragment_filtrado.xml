@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:padding="10dp"
         android:text="@string/titulo_dialogo_filtrar"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -17,23 +18,40 @@
         android:id="@+id/textView12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView8"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="21dp"
         android:padding="5dp"
-        android:text="@string/texto_filtrar2" />
+        android:text="@string/texto_filtrar2"
+        android:textSize="18sp" />
 
     <Spinner
         android:id="@+id/spnFiltro"
-        style="@style/Widget.AppCompat.Spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView12"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="28dp"
         android:dropDownWidth="match_parent"
+        android:elevation="3dp"
         android:entries="@array/filtros"
         android:padding="10dp" />
 
     <Button
         android:id="@+id/btnFiltrar"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/spnFiltro"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="29dp"
+        android:elevation="3dp"
         android:text="@string/texto_filtrar" />
-</LinearLayout>
+</RelativeLayout>
+

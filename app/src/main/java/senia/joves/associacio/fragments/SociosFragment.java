@@ -225,13 +225,12 @@ public class SociosFragment extends PadreFragment {
         }
 
 
-
     }
 
     //metodo que comprueba si el numero de socio actual es mas alto que el almacenado, para guardarlo o no
-    private void recogerMayorID(int numSocio){
+    private void recogerMayorID(int numSocio) {
 
-        if(numSocio > NUMERO_ULTIMO_SOCIO){
+        if (numSocio > NUMERO_ULTIMO_SOCIO) {
             NUMERO_ULTIMO_SOCIO = numSocio;
         }
 
@@ -286,13 +285,13 @@ public class SociosFragment extends PadreFragment {
     //metodo que muestra un dialogo de carga
     private void mostrarCarga() {
 
-            //creamos una barra de carga
-            mProgressDialog = new ProgressDialog(getActivity());
+        //creamos una barra de carga
+        mProgressDialog = new ProgressDialog(getActivity());
 
-            //mostramos un dialogo
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setMessage(getResources().getString(R.string.texto_cargando));
-            mProgressDialog.show();
+        //mostramos un dialogo
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getResources().getString(R.string.texto_cargando));
+        mProgressDialog.show();
     }
 
     private void esconderCarga() {
@@ -305,7 +304,6 @@ public class SociosFragment extends PadreFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.e("FILTRADO: ", FILTRADO +"");
         try {
             //activamos el listener a tiempo real
             mDatabase.orderByChild(FILTRADO).addValueEventListener(postListener);

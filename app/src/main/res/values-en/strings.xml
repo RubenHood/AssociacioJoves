@@ -15,6 +15,8 @@
     <string name="texto_btn_añadir">Add</string>
     <string name="texto_boton_reintentar">retry</string>
     <string name="texto_btn_acercade">About...</string>
+    <string name="texto_filtrar">filter</string>
+    <string name="texto_filtrar2">Choose filtering for members:</string>
     <string name="texto_acercade">This application has been created by the developer Rubén Vargas Guzman.
                                   All the material used is free distribution or has been created for use in this App.
                                   You can follow all the works of Rubén Vargas, clicking below, in his profile of GitHub and LinkedIn. </string>
@@ -31,6 +33,7 @@
     <string name="titulo_añadir">Insert member</string>
     <string name="titulo_dialogo">Add picture from</string>
     <string name="titulo_acercade">About</string>
+    <string name="titulo_dialogo_filtrar">Filter Members</string>
 
     <!--LABELS-->
     <string name="lbl_nombre">Name:</string>
@@ -68,4 +71,11 @@
     <string name="menu_opcion_buscar">search</string>
     <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>
     <string name="texto_linkedin"><a href="https://www.linkedin.com/in/rub%C3%A9n-vargas-guzman-660b418a/">LinkedIn</a></string>
+
+    <!--Arrays-->
+    <string-array name="filtros">
+        <item>Name</item>
+        <item>Member Nº</item>
+        <item>Fee paid</item>
+    </string-array>
 </resources>
