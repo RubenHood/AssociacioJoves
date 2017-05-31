@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Joves Seniencs</string>
+    <string name="app_name">JovesSeniencs Administrador</string>
 
     <!--TEXTOS-->
     <string name="texto_añadir">Se va a proceder a insertar los datos. Desea continuar?</string>
@@ -17,6 +17,9 @@
     <string name="texto_btn_acercade">Acerca de...</string>
     <string name="texto_filtrar">filtrar</string>
     <string name="texto_filtrar2">Elija el filtrado para los socios:</string>
+    <string name="texto_eliminar">Eliminar</string>
+    <string name="texto_eliminar2">Está seguro de eliminar el socio seleccionado?</string>
+    <string name="texto_eliminar_imagenes">Está seguro de eliminar la imagen seleccionada?</string>
     <string name="texto_acercade">Esta aplicación ha sido creada por el desarrollador Rubén Vargas Guzman.
                                   Todo el material usado es de distribución libre o ha sido creado para su uso en esta App.
                                   Puedes seguir todos los trabajos de Rubén Vargas, clicando abajo, en su perfil de GitHub y LinkedIn. </string>
@@ -34,6 +37,8 @@
     <string name="titulo_dialogo">Añadir imagen desde</string>
     <string name="titulo_acercade">Acerca de</string>
     <string name="titulo_dialogo_filtrar">Filtrar socios</string>
+    <string name="titulo_eliminar">Eliminar Socio</string>
+    <string name="titulo_eliminar_imagen">Eliminar Imagen</string>
 
     <!--LABELS-->
     <string name="lbl_nombre">Nombre:</string>
@@ -67,6 +72,8 @@
     <string name="exito_actualizar">Ha actualizado correctamente a:\n</string>
     <string name="exito_añadir">Ha añadido correctamente a:\n</string>
     <string name="exito_subir">Ha subido la imagen correctamente. En breve se mostrará.</string>
+    <string name="exito_eliminar">Ha eliminado correctamente a:\n</string>
+    <string name="exito_eliminar_imagen">Ha eliminado correctamente la imagen seleccionada.\n</string>
 
     <string name="menu_opcion_buscar">buscar</string>
     <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>

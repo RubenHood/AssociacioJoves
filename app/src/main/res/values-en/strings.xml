@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Joves Seniencs</string>
+    <string name="app_name">JovesSeniencs Administrador</string>
 
     <!--TEXTOS-->
     <string name="texto_añadir">You will proceed to insert the data. Do you wish to continue?</string>
@@ -17,6 +17,9 @@
     <string name="texto_btn_acercade">About...</string>
     <string name="texto_filtrar">filter</string>
     <string name="texto_filtrar2">Choose filtering for members:</string>
+    <string name="texto_eliminar">Delete</string>
+    <string name="texto_eliminar2">Are you sure to delete the selected member?</string>
+    <string name="texto_eliminar_imagenes">Are you sure to delete the selected image?</string>
     <string name="texto_acercade">This application has been created by the developer Rubén Vargas Guzman.
                                   All the material used is free distribution or has been created for use in this App.
                                   You can follow all the works of Rubén Vargas, clicking below, in his profile of GitHub and LinkedIn. </string>
@@ -34,6 +37,8 @@
     <string name="titulo_dialogo">Add picture from</string>
     <string name="titulo_acercade">About</string>
     <string name="titulo_dialogo_filtrar">Filter Members</string>
+    <string name="titulo_eliminar">Delete Member</string>
+    <string name="titulo_eliminar_imagen">Delete picture</string>
 
     <!--LABELS-->
     <string name="lbl_nombre">Name:</string>
@@ -67,6 +72,8 @@
     <string name="exito_actualizar">You have successfully updated:\n</string>
     <string name="exito_añadir">You have successfully added to:\n</string>
     <string name="exito_subir">You uploaded the image correctly. It will be displayed shortly.</string>
+    <string name="exito_eliminar">You have successfully deleted:\n</string>
+    <string name="exito_eliminar_imagen">You have successfully deleted the selected image.</string>
 
     <string name="menu_opcion_buscar">search</string>
     <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>

@@ -36,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
@@ -47,6 +48,7 @@ import senia.joves.associacio.LoginActivity;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Socio;
 import senia.joves.associacio.fragments.error.SinConexionFragment;
+import senia.joves.associacio.librerias.ImagenCircular;
 
 import static senia.joves.associacio.Static.Recursos.NUMERO_ULTIMO_SOCIO;
 
@@ -350,7 +352,7 @@ public class NewUserFragment extends Fragment {
                         imgSeleccionada = r.getUri();
 
                         //seteamos la imagen en la cabececera
-                        imgPerfil.setImageBitmap(r.getBitmap());
+                        Picasso.with(getActivity()).load(r.getUri()).transform(new ImagenCircular()).into(imgPerfil);
                     }
                 }).show(getFragmentManager());
 

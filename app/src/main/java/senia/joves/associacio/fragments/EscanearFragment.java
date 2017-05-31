@@ -79,6 +79,10 @@ public class EscanearFragment extends Fragment {
             case R.id.acercaDe:
                 new AcercaDeFragment().show(getFragmentManager(), "AcercaDe");
                 break;
+            case R.id.menu_escanear:
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.contenido, new EscanearFragment()).commit();
+                break;
 
         }
 
@@ -92,6 +96,9 @@ public class EscanearFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        //Abrimos la camara para escanear el qr
+        abrirCamaraQR();
 
         View rootView = inflater.inflate(R.layout.fragment_escanear, container, false);
 
@@ -128,14 +135,13 @@ public class EscanearFragment extends Fragment {
         poblacion = (TextView) view.findViewById(R.id.txfPoblacionScn);
         imgSocio = (ImageView) view.findViewById(R.id.imgSocioScn);
 
-        //Abrimos la camara para escanear el qr
-        abrirCamaraQR();
     }
 
     //metodo que se ejecuta al volver de la camara
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         //Recogemos los datos
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
@@ -155,10 +161,7 @@ public class EscanearFragment extends Fragment {
 
                 //Buscamos al socio en firebase por el string devuelto por el QR
                 consultaSocioQR(result.getContents());
-
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -170,10 +173,21 @@ public class EscanearFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         // recogemos los datos
-                        obtenerSocios(dataSnapshot);
+                        obtenerSocio(dataSnapshot);
 
-                        //rellenamos la interfaz
-                        rellenarInterfaz();
+                        //comprobamos si el socio devuelto no es null
+                        if (socioDev.getImagen() != null) {
+                            //rellenamos la interfaz
+                            rellenarInterfaz();
+
+                        } else {
+                            //mostramos un fragment en blanco
+                            getFragmentManager().beginTransaction()
+                                    .replace(R.id.contenido, new ErrorQRFragment()).commit();
+
+                            //mostramos un mensaje de exito
+                            Toast.makeText(getActivity(), getResources().getString(R.string.error_consultar), Toast.LENGTH_LONG).show();
+                        }
 
                         //Escondemos el elemento de carga
                         esconderCarga();
@@ -184,10 +198,11 @@ public class EscanearFragment extends Fragment {
                         FirebaseCrash.log("Error al recuperar datos: " + databaseError.toException());
                     }
                 });
+
     }
 
     //metodo que a partir de un dato Snapshot, rellenamos un arraylist con todos los socios
-    private void obtenerSocios(DataSnapshot dataSnapshot) {
+    private void obtenerSocio(DataSnapshot dataSnapshot) {
 
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
@@ -201,47 +216,29 @@ public class EscanearFragment extends Fragment {
             socioDev.setSocio(ds.child("socio").getValue().toString());
             socioDev.setTelefono(ds.child("telefono").getValue().toString());
             socioDev.setImagen(ds.child("imagen").getValue().toString());
-
         }
     }
 
-    //metodo que a partir del array, rellenamos la interfaz
+    //metodo que a partir del socio, rellenamos la interfaz, is no es null
     private void rellenarInterfaz() {
 
-        //capturamos el error
-        try {
+        //a partir del objeto Socio rellenado, rellenamos los TextViews
+        nombre.setText(socioDev.getNombre());
+        dni.setText(socioDev.getDni());
+        cuota.setText(socioDev.getQuota());
+        socio.setText(socioDev.getSocio());
+        direccion.setText(socioDev.getDireccion());
+        email.setText(socioDev.getEmail());
+        telefono.setText(socioDev.getTelefono());
+        poblacion.setText(socioDev.getPoblacion());
 
-            //a partir del objeto Socio rellenado, rellenamos los TextViews
-            nombre.setText(socioDev.getNombre());
-            dni.setText(socioDev.getDni());
-            cuota.setText(socioDev.getQuota());
-            socio.setText(socioDev.getSocio());
-            direccion.setText(socioDev.getDireccion());
-            email.setText(socioDev.getEmail());
-            telefono.setText(socioDev.getTelefono());
-            poblacion.setText(socioDev.getPoblacion());
-
-            //comprobamos si esta vacío para cargar la imagen
-            if (!socioDev.getImagen().equals("")) {
-                Picasso.with(getActivity().getApplicationContext()).load(socioDev.getImagen()).fit().transform(new ImagenCircular()).into(imgSocio);
-            }
-
-            //añadimos la descripcion al toolbar
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(socioDev.getNombre());
-        } catch (Exception e) {
-
-            //mostramos un fragment en blanco
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.contenido, new ErrorQRFragment()).commit();
-
-            //Escondemos el elemento de carga
-            esconderCarga();
-
-            //mostramos un mensaje de exito
-            Toast.makeText(getActivity(), getResources().getString(R.string.error_consultar), Toast.LENGTH_LONG).show();
-
-
+        //comprobamos si esta vacío para cargar la imagen
+        if (!socioDev.getImagen().equals("")) {
+            Picasso.with(getActivity().getApplicationContext()).load(socioDev.getImagen()).fit().transform(new ImagenCircular()).into(imgSocio);
         }
+
+        //añadimos la descripcion al toolbar
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(socioDev.getNombre());
 
     }
 
@@ -275,9 +272,6 @@ public class EscanearFragment extends Fragment {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
-
-        //Escondemos el elemento de carga
-        esconderCarga();
 
     }
 

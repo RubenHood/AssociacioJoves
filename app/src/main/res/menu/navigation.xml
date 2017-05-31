@@ -7,8 +7,8 @@
         android:title="@string/titulo_noticias" />
 
     <item
-        android:id="@+id/eventos"
-        android:icon="@drawable/ic_comprobar"
+        android:id="@+id/escanear"
+        android:icon="@drawable/ic_action_qr_code_black"
         android:title="@string/titulo_comprobar" />
 
     <item

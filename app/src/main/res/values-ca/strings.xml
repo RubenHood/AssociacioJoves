@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Joves Seniencs</string>
+    <string name="app_name">JovesSeniencs Administrador</string>
 
     <!--TEXTOS-->
     <string name="texto_añadir">Es va a procedir a inserir les dades. Voleu continuar?</string>
@@ -17,6 +17,9 @@
     <string name="texto_btn_añadir">Afegir</string>
     <string name="texto_boton_reintentar">reintentar</string>
     <string name="texto_btn_acercade">Sobre l\'app...</string>
+    <string name="texto_eliminar">Eliminar</string>
+    <string name="texto_eliminar2">Està segur d\' eliminar el soci seleccionat?</string>
+    <string name="texto_eliminar_imagenes">Està segur d\'eliminar aquesta imatge?</string>
     <string name="texto_acercade">Aquesta aplicació ha sigut creada pel desarrollador Rubén Vargas Guzman.
                                   Tot el material que conforma l\'aplicació, es de distribució lliure o ha sigut creat per al seu ús en aquesta aplicació.
                                   Pots seguir tots els treballs de Rubén Vargas, clicant baix, al seu perfil de GitHub o LinkedIn. </string>
@@ -34,6 +37,8 @@
     <string name="titulo_dialogo">Afegir imatge de</string>
     <string name="titulo_acercade">Sobre...</string>
     <string name="titulo_dialogo_filtrar">Filtre de socis</string>
+    <string name="titulo_eliminar">Eliminar Soci</string>
+    <string name="titulo_eliminar_imagen">Eliminar Imatge</string>
 
 
     <!--LABELS-->
@@ -68,6 +73,8 @@
     <string name="exito_actualizar">Ha actualitzat correctament a:\n</string>
     <string name="exito_añadir">Ha afegit correctament a:\n</string>
     <string name="exito_subir">Ha pujat la imatge correctament. En breu es mostrarà.</string>
+    <string name="exito_eliminar">Ha borrat correctament a:\n</string>
+    <string name="exito_eliminar_imagen">Ha borrat correctament la imatge anterior.\n</string>
 
     <string name="menu_opcion_buscar">buscar</string>
     <string name="texto_github"><a href="https://github.com/RubenThaBeat\">GitHub</a></string>

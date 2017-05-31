@@ -1,15 +1,17 @@
 package senia.joves.associacio.fragments;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
@@ -64,6 +67,7 @@ public class SociosFragment extends PadreFragment {
     SearchView searchView;
 
 
+    //metodos para el menu de appbar
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -110,6 +114,46 @@ public class SociosFragment extends PadreFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //metodos del menu contextual
+    // Creamos el menú contextual
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getActivity().getMenuInflater().inflate(R.menu.menu_contextual, menu);
+    }
+
+    // El usuario hace clic en una opción del menú contextual del listado
+    @Override
+    public boolean onContextItemSelected(final MenuItem item) {
+        // Buscamos la opción del menú contextual seleccionada
+        switch (item.getItemId()) {
+            case R.id.opcEliminar:
+
+                new AlertDialog.Builder(getActivity())
+                        .setIcon(R.drawable.ic_action_delete_forever)
+                        .setTitle(R.string.titulo_eliminar)
+                        .setMessage(R.string.texto_eliminar2)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Obtenemos el id del elemento seleccionado
+                                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+                                // Borramos ese registro
+                                eliminarSocio(LISTA_SOCIOS.get(info.position).getNombre());
+                            }
+                        })
+                        .show();
+
+
+                // Indicamos que hemos manejado la opción del menú
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     public SociosFragment() {
@@ -163,7 +207,6 @@ public class SociosFragment extends PadreFragment {
                         .addToBackStack("nuevoSocioFragment").commit();
             }
         });
-
 
     }
 
@@ -236,7 +279,6 @@ public class SociosFragment extends PadreFragment {
 
     }
 
-
     //metodo que a partir del array, rellenamos la interfaz
     private void rellenarInterfaz() {
 
@@ -254,6 +296,9 @@ public class SociosFragment extends PadreFragment {
 
         //pasamos el adapter a la lista
         lstLista.setAdapter(ad);
+
+        //agregamos a la lista la posibilidad de un menu contextual
+        registerForContextMenu(lstLista);
 
         lstLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -280,6 +325,20 @@ public class SociosFragment extends PadreFragment {
 
             }
         });
+    }
+
+    //metodo que elimina un registro a partir de su nombre
+    private void eliminarSocio(String nombre) {
+
+        //mostramos un dialogo de carga
+        mostrarCarga();
+
+        //añadimos un nuevo usuario
+        mDatabase.child(nombre).removeValue();
+
+        //mostramos un mensaje de éxito
+        Toast.makeText(getActivity(), getResources().getString(R.string.exito_eliminar) + nombre, Toast.LENGTH_LONG).show();
+
     }
 
     //metodo que muestra un dialogo de carga
@@ -324,6 +383,4 @@ public class SociosFragment extends PadreFragment {
         esconderCarga();
 
     }
-
-
 }

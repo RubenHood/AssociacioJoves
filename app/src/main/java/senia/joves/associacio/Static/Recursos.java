@@ -21,7 +21,7 @@ public final class Recursos {
     public static ArrayList<Socio> ARRAY_RECIBIDO = new ArrayList<>();
 
     //array donde guardo las urls de cada imagen
-    public static ArrayList<Noticia> LISTA_URL_IMAGENES = null;
+    public static ArrayList<Noticia> LISTA_IMAGENES = null;
 
     //Constante para almacenar el numero total de socios
     public static int OPCION_FILTRADO = 0;

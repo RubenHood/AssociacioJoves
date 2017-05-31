@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 import senia.joves.associacio.R;
 import senia.joves.associacio.entidades.Noticia;
 
-import static senia.joves.associacio.Static.Recursos.LISTA_URL_IMAGENES;
+import static senia.joves.associacio.Static.Recursos.LISTA_IMAGENES;
 
 //array que recibimos desde Sociosfragment
 
@@ -32,12 +32,12 @@ public class AdaptadorNoticias extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return LISTA_URL_IMAGENES.size();
+        return LISTA_IMAGENES.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return LISTA_URL_IMAGENES.get(position);
+        return LISTA_IMAGENES.get(position);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class AdaptadorNoticias extends BaseAdapter {
         ImageView img = (ImageView) rowView.findViewById(R.id.img_noticias);
 
         //obtenemos el objeto de la tabla a partir de la lista
-        Noticia item = LISTA_URL_IMAGENES.get(position);
+        Noticia item = LISTA_IMAGENES.get(position);
 
         //comprobamos si tiene foto de perfil para ponerla o para no ponerla
         Picasso.with(context).load(item.getNombre()).fit().into(img);

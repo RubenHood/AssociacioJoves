@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.socios:
                         //comprobamos si hay internet, para lanzar la aplicación o no.
                         if (isNetDisponible() || isOnlineNet()) {
-                            if (navigation.getSelectedItemId() == R.id.eventos || navigation.getSelectedItemId() == R.id.noticias) {
+                            if (navigation.getSelectedItemId() == R.id.escanear || navigation.getSelectedItemId() == R.id.noticias) {
                                 getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                                                 R.anim.enter_from_left, R.anim.exit_to_right)
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         return true;
-                    case R.id.eventos:
+                    case R.id.escanear:
                         //comprobamos si hay internet, para lanzar la aplicación o no.
                         if (isNetDisponible() || isOnlineNet()) {
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.noticias:
                         //comprobamos si hay internet, para lanzar la aplicación o no.
                         if (isNetDisponible() || isOnlineNet()) {
-                            if (navigation.getSelectedItemId() == R.id.socios || navigation.getSelectedItemId() == R.id.eventos) {
+                            if (navigation.getSelectedItemId() == R.id.socios || navigation.getSelectedItemId() == R.id.escanear) {
                                 getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right,
                                                 R.anim.enter_from_right, R.anim.exit_to_left)

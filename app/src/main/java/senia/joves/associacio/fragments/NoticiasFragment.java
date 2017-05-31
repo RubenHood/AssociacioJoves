@@ -1,18 +1,22 @@
 package senia.joves.associacio.fragments;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,7 +45,8 @@ import senia.joves.associacio.R;
 import senia.joves.associacio.adaptadores.AdaptadorNoticias;
 import senia.joves.associacio.entidades.Noticia;
 
-import static senia.joves.associacio.Static.Recursos.LISTA_URL_IMAGENES;
+import static senia.joves.associacio.Static.Recursos.LISTA_SOCIOS;
+import static senia.joves.associacio.Static.Recursos.LISTA_IMAGENES;
 
 /**
  * Created by Ruben on 08/05/2017.
@@ -70,6 +75,7 @@ public class NoticiasFragment extends PadreFragment {
     //referencia al adaptador
     AdaptadorNoticias ad;
 
+    //metodos para el menu del appbar
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -95,6 +101,44 @@ public class NoticiasFragment extends PadreFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //menu contextual de las imagenes
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getActivity().getMenuInflater().inflate(R.menu.menu_contextual, menu);
+    }
+
+    // El usuario hace clic en una opción del menú contextual del listado
+    @Override
+    public boolean onContextItemSelected(final MenuItem item) {
+        // Buscamos la opción del menú contextual seleccionada
+        switch (item.getItemId()) {
+            case R.id.opcEliminar:
+
+                new AlertDialog.Builder(getActivity())
+                        .setIcon(R.drawable.ic_action_delete_forever)
+                        .setTitle(R.string.titulo_eliminar_imagen)
+                        .setMessage(R.string.texto_eliminar_imagenes)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Obtenemos el id del elemento seleccionado
+                                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+                                // Borramos ese registro
+                                eliminarSocio(LISTA_IMAGENES.get(info.position).getId());
+                            }
+                        })
+                        .show();
+
+
+                // Indicamos que hemos manejado la opción del menú
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     public NoticiasFragment() {
@@ -129,7 +173,7 @@ public class NoticiasFragment extends PadreFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //comprobamos si el array esta lleno, para pedir los datos a internet o no
-        if (LISTA_URL_IMAGENES == null) {
+        if (LISTA_IMAGENES == null) {
             //mostramos una ventana de carga
             mostrarCarga();
 
@@ -164,9 +208,9 @@ public class NoticiasFragment extends PadreFragment {
     private void obtenerNombresIMG(DataSnapshot dataSnapshot) {
 
         //iniciamos la variable
-        LISTA_URL_IMAGENES = new ArrayList<>();
+        LISTA_IMAGENES = new ArrayList<>();
 
-        LISTA_URL_IMAGENES.clear();
+        LISTA_IMAGENES.clear();
 
         //rellenamos la lista de nombres, desde la BD REALTIME DB
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -178,14 +222,14 @@ public class NoticiasFragment extends PadreFragment {
             noticia.setId(ds.child("id").getValue().toString());
 
             //añadimos el objeto al arrray
-            LISTA_URL_IMAGENES.add(noticia);
+            LISTA_IMAGENES.add(noticia);
         }
 
         //ordenamos la lista por nombre
-        Collections.sort(LISTA_URL_IMAGENES);
+        Collections.sort(LISTA_IMAGENES);
 
         //le damos la vuelta al array
-        Collections.reverse(LISTA_URL_IMAGENES);
+        Collections.reverse(LISTA_IMAGENES);
 
         //rellenamos el interfaz
         rellenarInterfaz();
@@ -206,6 +250,9 @@ public class NoticiasFragment extends PadreFragment {
 
         //pasamos el adapter a la lista
         lstLista.setAdapter(ad);
+
+        //agregamos a la lista la posibilidad de un menu contextual
+        registerForContextMenu(lstLista);
 
     }
 
@@ -274,7 +321,7 @@ public class NoticiasFragment extends PadreFragment {
         n.setNombre(url);
 
         //obtenemos el ultimo id, y le sumamos uno para insertarlo en la bd
-        int idfinal = Integer.parseInt(LISTA_URL_IMAGENES.get(0).getId()) + 1;
+        int idfinal = Integer.parseInt(LISTA_IMAGENES.get(0).getId()) + 1;
 
         n.setId(idfinal + "");
 
@@ -283,9 +330,20 @@ public class NoticiasFragment extends PadreFragment {
 
         //mostramos un mensaje de éxito
         Toast.makeText(getActivity(), getResources().getString(R.string.exito_subir), Toast.LENGTH_LONG).show();
+    }
 
-        //
-        rellenarInterfaz();
+    //metodo que elimina un registro a partir de su nombre
+    private void eliminarSocio(String id) {
+
+        //mostramos un dialogo de carga
+        mostrarCarga();
+
+        //añadimos un nuevo usuario
+        mDatabase.child("img" + id).removeValue();
+
+        //mostramos un mensaje de éxito
+        Toast.makeText(getActivity(), getResources().getString(R.string.exito_eliminar_imagen), Toast.LENGTH_LONG).show();
+
     }
 
     //al empezar la actividad
@@ -320,7 +378,6 @@ public class NoticiasFragment extends PadreFragment {
         }
         return builder.toString();
     }
-
 
     //metodo que muestra un dialogo de carga
     private void mostrarCarga() {
